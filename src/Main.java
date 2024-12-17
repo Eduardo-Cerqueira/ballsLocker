@@ -17,20 +17,32 @@ public class Main {
 
         if (menuEntry == 1) {
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Word to encrypt:");
-            String word = scanner.nextLine();
+
+            boolean wordIsValid = false;
+            String word = "";
+
+            while (!wordIsValid) {
+                System.out.println("Word to encrypt:");
+                word = scanner.nextLine();
+
+                if (!word.isBlank()) {
+                    wordIsValid = true;
+                } else {
+                    System.out.println("Word is invalid !");
+                }
+            }
 
             boolean numberIsValid = false;
 
             while (!numberIsValid) {
                 try {
-                    System.out.println("Number of rotate:");  // TODO: check if word valid (empty, ...)
+                    System.out.println("Number of rotate:");
                     String numberOfRotate = scanner.nextLine();
 
                     int parsedInt = Integer.parseInt(numberOfRotate);
                     numberIsValid = true;
 
-                    String encryptedWord = rotCipher.encrypt(word, parsedInt);
+                    String encryptedWord = rotCipher.encrypt(word, parsedInt, false);
                     System.out.println("Encrypted word is: ".concat(encryptedWord));
                 } catch (NumberFormatException e) {
                     System.out.println("Number is invalid !"); // if number < -2147483648 (Integer.MIN_VALUE) or number > 2147483648 (Integer.MAX_VALUE)
@@ -38,8 +50,20 @@ public class Main {
             }
         } else if (menuEntry == 2) {
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Word to decrypt:"); // TODO: check if word valid (empty, ...)
-            String word = scanner.nextLine();
+
+            boolean wordIsValid = false;
+            String word = "";
+
+            while (!wordIsValid) {
+                System.out.println("Word to decrypt:");
+                word = scanner.nextLine();
+
+                if (!word.isBlank()) {
+                    wordIsValid = true;
+                } else {
+                    System.out.println("Word is invalid !");
+                }
+            }
 
             boolean numberIsValid = false;
 
