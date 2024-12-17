@@ -27,4 +27,8 @@ public class MD5 {
             throw new RuntimeException(e);
         }
     }
+
+    public boolean compare(String stringToCompareWithHash, String hash) {
+        return hash(stringToCompareWithHash).equals(hash);
+    }
 }
