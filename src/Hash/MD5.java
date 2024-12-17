@@ -1,6 +1,7 @@
 package Hash;
 
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -15,7 +16,7 @@ public class MD5 {
 
             MessageDigest MD5Instance = MessageDigest.getInstance("MD5");
 
-            byte[] messageDigest = MD5Instance.digest(stringToHash.getBytes());
+            byte[] messageDigest = MD5Instance.digest(stringToHash.getBytes(StandardCharsets.UTF_8));
 
             BigInteger rawMD5Hash = new BigInteger(1, messageDigest);
 
