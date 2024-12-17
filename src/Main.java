@@ -1,4 +1,5 @@
 import Cipher.ROT;
+import Hash.MD5;
 
 import java.util.Arrays;
 import java.util.List;
@@ -7,10 +8,10 @@ import java.util.Scanner;
 public class Main {
     static Menu menu = new Menu();
     static ROT rotCipher = new ROT();
+    static MD5 md5 = new MD5();
 
     public static void main(String[] args) {
-
-        List<String> homeMenu = Arrays.asList("Crypter un message avec ROT", "Decrypter un message avec ROT");
+        List<String> homeMenu = Arrays.asList("Crypter un message avec ROT", "Decrypter un message avec ROT\n", "Hasher un message");
 
         int menuEntry = menu.generateMenu(homeMenu, "\nWhere do you want to go ?");
         System.out.println("Menu entry " + menuEntry + " has been choosen !");
@@ -81,6 +82,24 @@ public class Main {
                     System.out.println("Number is invalid !"); // if number < -2147483648 (Integer.MIN_VALUE) or number > 2147483648 (Integer.MAX_VALUE)
                 }
             }
+        } else if (menuEntry == 3) {
+            Scanner scanner = new Scanner(System.in);
+
+            boolean wordIsValid = false;
+            String word = "";
+
+            while (!wordIsValid) {
+                System.out.println("Word to hash:");
+                word = scanner.nextLine();
+
+                if (!word.isBlank()) {
+                    wordIsValid = true;
+                } else {
+                    System.out.println("Word is invalid !");
+                }
+            }
+
+            System.out.println(md5.hash(word));
         }
     }
 }
