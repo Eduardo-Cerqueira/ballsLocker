@@ -13,7 +13,14 @@ public class Main {
     static SHA256 sha256 = new SHA256();
 
     public static void main(String[] args) {
-        List<String> homeMenu = Arrays.asList("Crypter un message avec ROT", "Decrypter un message avec ROT\n", "Hasher un message avec MD5", "Hasher un message avec SHA-256");
+        List<String> homeMenu = Arrays.asList(
+                "Crypter un message avec ROT",
+                "Decrypter un message avec ROT\n",
+                "Hasher un message avec MD5",
+                "Hasher un message avec SHA-256\n",
+                "Comparer un message avec un hash MD5",
+                "Comparer un message avec un hash SHA-256"
+        );
 
         int menuEntry = menu.generateMenu(homeMenu, "\nWhere do you want to go ?");
         System.out.println("Menu entry " + menuEntry + " has been choosen !");
@@ -120,6 +127,70 @@ public class Main {
             }
 
             System.out.println(sha256.hash(word));
+        } else if (menuEntry == 5) {
+            Scanner scanner = new Scanner(System.in);
+
+            boolean wordIsValid = false;
+            String word = "";
+
+            while (!wordIsValid) {
+                System.out.println("Word to hash:");
+                word = scanner.nextLine();
+
+                if (!word.isBlank()) {
+                    wordIsValid = true;
+                } else {
+                    System.out.println("Word is invalid !");
+                }
+            }
+
+            boolean hashIsValid = false;
+            String hash = "";
+
+            while (!hashIsValid) {
+                System.out.println("Hash:");
+                hash = scanner.nextLine();
+
+                if (!hash.isBlank()) {
+                    hashIsValid = true;
+                } else {
+                    System.out.println("Hash is invalid !");
+                }
+            }
+
+            System.out.println(md5.compare(word, hash));
+        } else if (menuEntry == 6) {
+            Scanner scanner = new Scanner(System.in);
+
+            boolean wordIsValid = false;
+            String word = "";
+
+            while (!wordIsValid) {
+                System.out.println("Word to hash:");
+                word = scanner.nextLine();
+
+                if (!word.isBlank()) {
+                    wordIsValid = true;
+                } else {
+                    System.out.println("Word is invalid !");
+                }
+            }
+
+            boolean hashIsValid = false;
+            String hash = "";
+
+            while (!hashIsValid) {
+                System.out.println("Hash:");
+                hash = scanner.nextLine();
+
+                if (!hash.isBlank()) {
+                    hashIsValid = true;
+                } else {
+                    System.out.println("Hash is invalid !");
+                }
+            }
+
+            System.out.println(sha256.compare(word, hash));
         }
     }
 }
