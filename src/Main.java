@@ -30,7 +30,29 @@ public class Main {
                     int parsedInt = Integer.parseInt(numberOfRotate);
                     numberIsValid = true;
 
-                    rotCipher.encrypt(word, parsedInt, false);
+                    String encryptedWord = rotCipher.encrypt(word, parsedInt);
+                    System.out.println("Encrypted word is: ".concat(encryptedWord));
+                } catch (NumberFormatException e) {
+                    System.out.println("Number is invalid !"); // if number < -2147483648 (Integer.MIN_VALUE) or number > 2147483648 (Integer.MAX_VALUE)
+                }
+            }
+        } else if (menuEntry == 2) {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Word to decrypt:"); // TODO: check if word valid (empty, ...)
+            String word = scanner.nextLine();
+
+            boolean numberIsValid = false;
+
+            while (!numberIsValid) {
+                try {
+                    System.out.println("Number of rotate:");
+                    String numberOfRotate = scanner.nextLine();
+
+                    int parsedInt = Integer.parseInt(numberOfRotate);
+                    numberIsValid = true;
+
+                    String decryptedWord = rotCipher.decrypt(word, parsedInt);
+                    System.out.println("Decrypted word is: ".concat(decryptedWord));
                 } catch (NumberFormatException e) {
                     System.out.println("Number is invalid !"); // if number < -2147483648 (Integer.MIN_VALUE) or number > 2147483648 (Integer.MAX_VALUE)
                 }
