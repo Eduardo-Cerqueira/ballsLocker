@@ -24,7 +24,7 @@ public class Polybe {
 
     private SquareMethode methode;
     private char[][] polybeSquare;
-    private Map<Character, String> positionMap;
+    private Map<Character, String> positionMap; // (format : {letter=coordinates})
 
     // Constructor
     public Polybe(SquareMethode methode) {
@@ -42,6 +42,10 @@ public class Polybe {
         this.polybeSquare = polybeSquare;
     }
 
+    public SquareMethode getMethode() {
+        return methode;
+    }
+
     public void setMethode(SquareMethode methode) {
         this.methode = methode;
     }
@@ -56,8 +60,7 @@ public class Polybe {
 
     /**
      * Returns a 5x5 matrix with the alphabet letters depending on the methode
-     *
-     * @return : polybe square
+     * @return polybe square
      */
     private char[][] generateSquare() {
         return switch (this.methode) {
@@ -71,8 +74,8 @@ public class Polybe {
     /**
      * Returns a 5x5 matrix with the alphabet letters in a horizontal way
      *
-     * @param inverted : if true, the letters are in a inverted way
-     * @return : horizontal 5x5 matrix
+     * @param inverted if true, the letters are in an inverted way
+     * @return horizontal 5x5 matrix
      */
     private char[][] generateHorizontalSquare(boolean inverted) {
         char[][] square = new char[5][5];
@@ -89,8 +92,8 @@ public class Polybe {
     /**
      * Returns a 5x5 matrix with the alphabet letters in a vertical way
      *
-     * @param inverted : if true, the letters are in a inverted way
-     * @return : vertical 5x5 matrix
+     * @param inverted if true, the letters are in an inverted way
+     * @return vertical 5x5 matrix
      */
     private char[][] generateVerticalSquare(boolean inverted) {
         char[][] square = new char[5][5];
@@ -104,20 +107,28 @@ public class Polybe {
         return square;
     }
 
+    /**
+     * Associate each character to its coordinates
+     * <p>
+     * Format : {letter : coordinates} <br/>
+     * Example : {"A":"00", "B":"01"}
+     * </p>
+     * @return position map
+     */
     private Map<Character, String> buildPositionMap() {
         Map<Character, String> map = new HashMap<>();
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
+                // Add coordinates for each letter (format : {letter=coordinates})
                 map.put(polybeSquare[i][j], "" + i + j);
             }
         }
         return map;
     }
 
-
-        /**
-         * Prints the polybe square
-         */
+    /**
+     * Print the polybe square
+     */
     public void printSquare() {
         System.out.println("Polybe Square:");
         for (char[] row : this.polybeSquare) {
@@ -127,13 +138,20 @@ public class Polybe {
 
     /**
      * Returns the encrypted message
-     * @param message : the message to encrypt
-     * @return : the encrypted message
+     * @param message the message to encrypt
+     * @return the encrypted message
      */
     private String encrypt(String message) {
         StringBuilder encryptedMessage = new StringBuilder();
-        for (char letter : message.toCharArray()) {
-            if (positionMap.containsKey(letter)) {
+        // Upper message and remove numeric values and special characters
+        String cleanMessage = message.toUpperCase().replaceAll("[^A-Z]+", "");
+        for (char letter : cleanMessage.toCharArray()) {
+            // Replace "W" by "VV" because "W" does not exist in polybe base characters
+            if (letter == 'W') {
+                encryptedMessage.append("VV");
+            // Check if hash map contains letter
+            } else if (positionMap.containsKey(letter)) {
+                // Add coordinates to encrypted message
                 encryptedMessage.append(positionMap.get(letter));
             }
         }
@@ -143,28 +161,35 @@ public class Polybe {
     /**
      * Returns the decrypted message
      * @param encryptedMessage The encrypted message to decrypt
-     * @return : the decrypted message
+     * @return the decrypted message
      */
-    private String decrypt(String encryptedMessage) { //TODO : générer par IA, besoin de comprendre
+    private String decrypt(String encryptedMessage) {
         StringBuilder decryptedMessage = new StringBuilder();
 
+        // For loop each pair (coordinates)
         for (int i = 0; i < encryptedMessage.length(); i += 2) {
-            int row = Character.getNumericValue(encryptedMessage.charAt(i));
-            int col = Character.getNumericValue(encryptedMessage.charAt(i + 1));
-
-            // Ajoute la lettre correspondante dans le carré de Polybe
-            decryptedMessage.append(polybeSquare[row][col]);
+            String pair = encryptedMessage.substring(i, i + 2);
+            // Replace "VV" by "W"
+            if (pair.equals("VV")) {
+                decryptedMessage.append('W');
+            } else {
+                // Get row index of the pair (converted to int)
+                int row = Character.getNumericValue(pair.charAt(0));  // getNumericValue converts char to int != (int) -> return ascii code
+                // Get col index of the pair (converted to int)
+                int col = Character.getNumericValue(pair.charAt(1));
+                // Add char to message
+                decryptedMessage.append(polybeSquare[row][col]);
+            }
         }
-
         return decryptedMessage.toString();
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) { //TODO : remove and modify menu
         Polybe polybe = new Polybe(SquareMethode.HORIZONTAL);
         polybe.printSquare();
 
-        String message = "HELLO WORLD"; //TODO : gérer les w
+        String message = "Salut l'équipe";
         String encryptedMessage = polybe.encrypt(message);
         String decryptedMessage = polybe.decrypt(encryptedMessage);
 
