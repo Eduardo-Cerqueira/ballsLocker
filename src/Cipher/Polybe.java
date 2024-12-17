@@ -142,11 +142,21 @@ public class Polybe {
 
     /**
      * Returns the decrypted message
-     *
+     * @param encryptedMessage The encrypted message to decrypt
      * @return : the decrypted message
      */
-    private String decrypt(String encryptedMessage) {
-        return "";
+    private String decrypt(String encryptedMessage) { //TODO : générer par IA, besoin de comprendre
+        StringBuilder decryptedMessage = new StringBuilder();
+
+        for (int i = 0; i < encryptedMessage.length(); i += 2) {
+            int row = Character.getNumericValue(encryptedMessage.charAt(i));
+            int col = Character.getNumericValue(encryptedMessage.charAt(i + 1));
+
+            // Ajoute la lettre correspondante dans le carré de Polybe
+            decryptedMessage.append(polybeSquare[row][col]);
+        }
+
+        return decryptedMessage.toString();
     }
 
 
@@ -154,7 +164,7 @@ public class Polybe {
         Polybe polybe = new Polybe(SquareMethode.HORIZONTAL);
         polybe.printSquare();
 
-        String message = "HELLO";
+        String message = "HELLO WORLD"; //TODO : gérer les w
         String encryptedMessage = polybe.encrypt(message);
         String decryptedMessage = polybe.decrypt(encryptedMessage);
 
