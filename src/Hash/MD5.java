@@ -5,6 +5,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class MD5 {
+    /**
+     * This function gives the hash of text using MD5 algorithm
+     * @param stringToHash Text to hash
+     * @return Hash for text
+     */
     public String hash(String stringToHash) {
         try {
 
