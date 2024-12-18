@@ -6,6 +6,7 @@ import java.util.Map;
 
 public class Polybe {
 
+    // Choose method for each generation of polybe square
     public enum SquareMethode {
         HORIZONTAL,
         INVERTED_HORIZONTAL,
@@ -13,7 +14,7 @@ public class Polybe {
         INVERTED_VERTICAL,
     }
 
-    // polybe base square
+    // Array containing all alphabet letters
     private final char[] polybeBaseCharacters = {
             'A', 'B', 'C', 'D', 'E',
             'F', 'G', 'H', 'I', 'J',
