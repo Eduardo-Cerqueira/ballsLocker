@@ -44,9 +44,4 @@ public class LFSR {
         // Return sum of bytes modulo range
         return IntStream.of(bytesIntValues).sum() % range;
     }
-
-    public static void main(String[] args) {
-        LFSR lfsr = new LFSR("graine");
-        System.out.println(lfsr.generate(100));
-    }
 }
