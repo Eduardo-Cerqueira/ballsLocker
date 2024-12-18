@@ -141,7 +141,7 @@ public class Polybe {
      * @param message the message to encrypt
      * @return the encrypted message
      */
-    private String encrypt(String message) {
+    public String encrypt(String message) {
         StringBuilder encryptedMessage = new StringBuilder();
         // Upper message and remove numeric values and special characters
         String cleanMessage = message.toUpperCase().replaceAll("[^A-Z]+", "");
@@ -163,7 +163,7 @@ public class Polybe {
      * @param encryptedMessage The encrypted message to decrypt
      * @return the decrypted message
      */
-    private String decrypt(String encryptedMessage) {
+    public String decrypt(String encryptedMessage) {
         StringBuilder decryptedMessage = new StringBuilder();
 
         // For loop each pair (coordinates)
@@ -182,19 +182,5 @@ public class Polybe {
             }
         }
         return decryptedMessage.toString();
-    }
-
-
-    public static void main(String[] args) { //TODO : remove and modify menu
-        Polybe polybe = new Polybe(SquareMethode.HORIZONTAL);
-        polybe.printSquare();
-
-        String message = "Salut l'équipe";
-        String encryptedMessage = polybe.encrypt(message);
-        String decryptedMessage = polybe.decrypt(encryptedMessage);
-
-        System.out.println(message);
-        System.out.println(encryptedMessage);
-        System.out.println(decryptedMessage);
     }
 }

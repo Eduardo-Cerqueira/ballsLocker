@@ -1,3 +1,4 @@
+import Cipher.Polybe;
 import Cipher.ROT;
 import Hash.MD5;
 import Hash.SHA256;
@@ -12,15 +13,18 @@ public class Main {
     static ROT rotCipher = new ROT();
     static MD5 md5 = new MD5();
     static SHA256 sha256 = new SHA256();
+    static Polybe polybe = new Polybe(Polybe.SquareMethode.HORIZONTAL);
 
     public static void main(String[] args) {
         List<String> homeMenu = Arrays.asList(
-                "Crypter un message avec ROT",
-                "Decrypter un message avec ROT\n",
+                "Chiffrer un message avec ROT",
+                "Déchiffrer un message avec ROT\n",
                 "Hasher un message avec MD5",
                 "Hasher un message avec SHA-256\n",
                 "Comparer un message avec un hash MD5",
-                "Comparer un message avec un hash SHA-256"
+                "Comparer un message avec un hash SHA-256\n",
+                "Chiffrer un message avec Polybe",
+                "Déchiffrer un message avec Polybe"
         );
 
         int menuEntry = Menu.generateMenu(homeMenu, "\nWhere do you want to go ?");
@@ -57,6 +61,12 @@ public class Main {
             String word = inputString("Word to compare with hash:", "Word is invalid !");
             String hash = inputString("Hash:", "Hash is invalid !");
             System.out.println(sha256.compare(word, hash));
+        } else if (menuEntry == 7) { //TODO : choose methode
+            String word = inputString("Word to encrypt:", "Word is invalid !");
+            System.out.println(polybe.encrypt(word));
+        } else if (menuEntry == 8) {
+            String word = inputString("Word to decrypt:", "Word is invalid !");
+            System.out.println(polybe.decrypt(word));
         }
     }
 }
