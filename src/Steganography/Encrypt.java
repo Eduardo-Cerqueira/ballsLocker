@@ -1,5 +1,7 @@
 package Steganography;
 
+import Helpers.Convert;
+
 import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -10,18 +12,29 @@ import java.io.IOException;
 
 
 public class Encrypt {
-    public static void Encrypt(File imageFile, String message) {
+    /**
+     * Encrypts the message in the image.
+     * @param inputFilePath The path of the image to encrypt.
+     * @param outputFilePath The path of the new image with the encrypted message.
+     * @param message The message to encrypt.
+     */
+    public static void encrypt(String inputFilePath, String outputFilePath, String message) {
 
-        String newImageFileString = "export.png";
-        File newImageFile = new File(newImageFileString);
+        // Get input file by path
+        File inputFile = new File(inputFilePath);
+        // Get output file by path
+        File newImageFile = new File(outputFilePath);
 
-        BufferedImage image;
         try {
-            image = ImageIO.read(imageFile);
-            BufferedImage imageToEncrypt = GetImageToEncrypt(image);
-            Pixel[] pixels = GetPixelArray(imageToEncrypt);
-            String[] messageInBinary = ConvertMessageToBinary(message);
-            EncodeMessageBinaryInPixels(pixels, messageInBinary);
+            // Read image
+            BufferedImage image = ImageIO.read(inputFile);
+            // Create a new image with the same properties as the original image
+            BufferedImage imageToEncrypt = copyImage(image);
+            // Extract the pixels from the image
+            Pixel[] pixels = extractPixels(imageToEncrypt);
+            // Convert the message to a binary array
+            String[] messageInBinary = convertMessageToBinaryArray(message);
+            encodeMessageBinaryInPixels(pixels, messageInBinary);
             ReplacePixelsInNewBufferedImage(pixels, image);
             SaveNewFile(image, newImageFile);
         } catch (IOException e) {
@@ -29,26 +42,36 @@ public class Encrypt {
         }
     }
 
-    /*
-     * Copies the image into a new buffered image.
+    /**
+     * Copy an image with the same properties as input image.
+     * @param image The image to encrypt.
+     * @return The image to encrypt.
      */
-    private static BufferedImage GetImageToEncrypt(BufferedImage image) {
+    private static BufferedImage copyImage(BufferedImage image) {
         ColorModel colorModel = image.getColorModel();
+        // Returns whether the alpha channel is premultiplied -> Objective : faithfully reproduce the image
         boolean isAlphaPremultiplied = colorModel.isAlphaPremultiplied();
+        // Returns a copy of the image data for this image as a WritableRaster
+        // WritableRaster : A two-dimensional array of pixels (stored as integers) that represent an image.
         WritableRaster raster = image.copyData(null);
+        // Create a new image with the same properties as the original image
         return new BufferedImage(colorModel, raster, isAlphaPremultiplied, null);
     }
 
-    /*
-     * Gets two-dimensional array of colors from the image to encrypt.
+    /**
+     * Extract the pixels from the image.
+     * @param imageToEncrypt The image to encrypt.
+     * @return The pixels of the image.
      */
-    private static Pixel[] GetPixelArray(BufferedImage imageToEncrypt){
+    private static Pixel[] extractPixels(BufferedImage imageToEncrypt){
         int height = imageToEncrypt.getHeight();
         int width = imageToEncrypt.getWidth();
+        // Create an array of empty pixels
         Pixel[] pixels = new Pixel[height * width];
         int count = 0;
         for(int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
+                // Get the color of the pixel at the specified coordinates
                 Color colorToAdd = new Color(imageToEncrypt.getRGB(x, y));
                 pixels[count] = new Pixel(x, y, colorToAdd);
                 count++;
@@ -57,65 +80,46 @@ public class Encrypt {
         return pixels;
     };
 
-    /*
-     * Converting the message into binary.
+    /**
+     * Convert the message to a binary array.
+     * @param message The message to encrypt.
+     * @return The message in binary.
      */
-    private static String[] ConvertMessageToBinary(String message) {
-        int[] messageInAscii = ConvertMessageToAscii(message);
-        String[] binary = ConvertAsciiToBinary(messageInAscii);
-        return binary;
-    }
-
-    /*
-     * Converting the message into ASCII.
-     */
-    private static int[] ConvertMessageToAscii(String message) {
-        int[] messageCharactersInAscii = new int[message.length()];
-        for(int i = 0; i < message.length(); i++) {
-            int asciiValue = (int) message.charAt(i);
-            messageCharactersInAscii[i] = asciiValue;
+    private static String[] convertMessageToBinaryArray(String message) {
+        // Convert the message to a String containing the binary representation of each character
+        String fullBinary = Convert.convertStringToBinary(message);
+        // Create an empty array of String
+        String[] binaryArray = new String[message.length()];
+        for (int i = 0; i < message.length(); i++) {
+            // Fill the array with the binary representation of each character (8 bits)
+            binaryArray[i] = fullBinary.substring(i * 8, (i + 1) * 8);
         }
-        return messageCharactersInAscii;
+        return binaryArray;
     }
 
-    /*
-     * Converting the ASCII code to Binary.
+    /**
+     * Encode the message in the pixels.
+     * @param pixels The pixels of the image.
+     * @param messageBinary The message in binary.
      */
-    private static String[] ConvertAsciiToBinary(int[] messageInAscii) {
-        String[] messageInBinary = new String[messageInAscii.length];
-        for(int i = 0; i < messageInAscii.length; i++) {
-            String asciiBinary = LeftPadZeros(Integer.toBinaryString(messageInAscii[i]));
-            messageInBinary[i] = asciiBinary;
-        }
-        return messageInBinary;
-    }
-
-    /*
-     * Left padding the binary value with zeros to make an 8 digit string.
-     */
-    private static String LeftPadZeros(String value) {
-        StringBuilder paddedValue = new StringBuilder("00000000");
-        int offSet = 8 - value.length();
-        for(int i = 0 ; i < value.length(); i++) {
-            paddedValue.setCharAt(i+offSet, value.charAt(i));
-        }
-        return paddedValue.toString();
-    }
-
-
-    /*
-     * Encoding the message in the pixels.
-     */
-    private static void EncodeMessageBinaryInPixels(Pixel[] pixels, String[] messageBinary) {
+    private static void encodeMessageBinaryInPixels(Pixel[] pixels, String[] messageBinary) {
         int pixelIndex = 0;
         boolean isLastCharacter = false;
-        for(int i = 0; i < messageBinary.length; i++) {
-            Pixel[] currentPixels = new Pixel[] {pixels[pixelIndex], pixels[pixelIndex+1], pixels[pixelIndex+2]};
-            if(i+1 == messageBinary.length) {
+
+        // Loop through each character of the message, represented in binary
+        for (int i = 0; i < messageBinary.length; i++) {
+            // Select 3 consecutive pixels to encode one character.
+            // Each pixel has 3 color components (Red, Green, and Blue), and each component can store 1 bit of the message.
+            // So, 3 pixels will store enough information for 8 bits of a character, plus 1 extra bit for the control bit.
+            Pixel[] currentPixels = new Pixel[] {pixels[pixelIndex], pixels[pixelIndex + 1], pixels[pixelIndex + 2]};
+            // Check if this is the last character of the message.
+            if (i + 1 == messageBinary.length) {
                 isLastCharacter = true;
             }
+            // Call method to change the color of the 3 pixels based on the binary character
             ChangePixelsColor(messageBinary[i], currentPixels, isLastCharacter);
-            pixelIndex = pixelIndex +3;
+            // Update the index to point to the next triplet of pixels
+            pixelIndex = pixelIndex + 3;
         }
     }
 
@@ -127,7 +131,7 @@ public class Encrypt {
             pixels[i].setColor(GetNewPixelColor(pixelRGBBinary));
             messageBinaryIndex = messageBinaryIndex + 3;
         }
-        if(isLastCharacter == false) {
+        if(!isLastCharacter) {
             char[] messageBinaryChars = new char[] {messageBinary.charAt(messageBinaryIndex), messageBinary.charAt(messageBinaryIndex+1), '1'};
             String[] pixelRGBBinary = GetPixelsRGBBinary(pixels[pixels.length-1], messageBinaryChars);
             pixels[pixels.length-1].setColor(GetNewPixelColor(pixelRGBBinary));
@@ -139,11 +143,11 @@ public class Encrypt {
     }
 
     private static String[] GetPixelsRGBBinary(Pixel pixel, char[] messageBinaryChars) {
-        String[] pixelRGBBinary = new String[3];
-        pixelRGBBinary[0] = ChangePixelBinary(Integer.toBinaryString(pixel.getColor().getRed()), messageBinaryChars[0]);
-        pixelRGBBinary[1] = ChangePixelBinary(Integer.toBinaryString(pixel.getColor().getGreen()), messageBinaryChars[1]);
-        pixelRGBBinary[2] = ChangePixelBinary(Integer.toBinaryString(pixel.getColor().getBlue()), messageBinaryChars[2]);
-        return pixelRGBBinary;
+        return new String[] {
+            ChangePixelBinary(Integer.toBinaryString(pixel.getColor().getRed()), messageBinaryChars[0]),
+            ChangePixelBinary(Integer.toBinaryString(pixel.getColor().getGreen()), messageBinaryChars[1]),
+            ChangePixelBinary(Integer.toBinaryString(pixel.getColor().getBlue()), messageBinaryChars[2])
+        };
     }
 
     private static String ChangePixelBinary(String pixelBinary, char messageBinaryChar) {
