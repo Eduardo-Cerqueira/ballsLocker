@@ -8,7 +8,7 @@ public class Menu {
      * @param question Question to ask when requesting user input
      * @return User input as integer
      */
-    public static int generateMenu(List<String> menu, String question) {
+    public static int generateMenu(List<String> menu, String question, int exitKey) {
         for (int i = 0; i < menu.size(); i++) {
             String string = (i + 1) +
                     ". " +
@@ -17,7 +17,9 @@ public class Menu {
             System.out.println(string);
         }
 
-        return interactWithMenu(menu, question);
+        System.out.println("\nYou can leave using '".concat(Integer.toString(exitKey)).concat("'"));
+
+        return interactWithMenu(menu, question, exitKey);
     }
 
     /**
@@ -26,12 +28,16 @@ public class Menu {
      * @param question Question to ask when requesting user input
      * @return  User input as integer
      */
-    public static int interactWithMenu(List<String> menu, String question) {
+    public static int interactWithMenu(List<String> menu, String question, int exitKey) {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
             System.out.println(question);
             String choice = scanner.nextLine();
+
+            if (choice.equals(String.valueOf(exitKey))) {
+                return Integer.parseInt(choice);
+            }
 
             for (int i = 0; i < menu.size(); i++) {
                 if (choice.equals(String.valueOf(i + 1))) {
