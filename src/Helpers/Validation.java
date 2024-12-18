@@ -3,6 +3,11 @@ package Helpers;
 import java.util.Scanner;
 
 public class Validation {
+    /**
+     *
+     * @param word Text to validate/check
+     * @return Boolean stating if text is LowerCase or UpperCase
+     */
     public boolean isLowerCase(String word) {
         return word.equals(word.toLowerCase());
     }
