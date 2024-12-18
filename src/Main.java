@@ -1,5 +1,6 @@
 import Cipher.ROT;
 import Hash.MD5;
+import Hash.SHA256;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,9 +10,10 @@ public class Main {
     static Menu menu = new Menu();
     static ROT rotCipher = new ROT();
     static MD5 md5 = new MD5();
+    static SHA256 sha256 = new SHA256();
 
     public static void main(String[] args) {
-        List<String> homeMenu = Arrays.asList("Crypter un message avec ROT", "Decrypter un message avec ROT\n", "Hasher un message");
+        List<String> homeMenu = Arrays.asList("Crypter un message avec ROT", "Decrypter un message avec ROT\n", "Hasher un message avec MD5", "Hasher un message avec SHA-256");
 
         int menuEntry = menu.generateMenu(homeMenu, "\nWhere do you want to go ?");
         System.out.println("Menu entry " + menuEntry + " has been choosen !");
@@ -100,6 +102,24 @@ public class Main {
             }
 
             System.out.println(md5.hash(word));
+        } else if (menuEntry == 4) {
+            Scanner scanner = new Scanner(System.in);
+
+            boolean wordIsValid = false;
+            String word = "";
+
+            while (!wordIsValid) {
+                System.out.println("Word to hash:");
+                word = scanner.nextLine();
+
+                if (!word.isBlank()) {
+                    wordIsValid = true;
+                } else {
+                    System.out.println("Word is invalid !");
+                }
+            }
+
+            System.out.println(sha256.hash(word));
         }
     }
 }
