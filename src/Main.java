@@ -27,7 +27,8 @@ public class Main {
                 "Chiffrer un message avec Polybe",
                 "Déchiffrer un message avec Polybe\n",
                 "Chaine de encryptage",
-                "Chaine de decryptage"
+                "Chaine de decryptage\n",
+                "Générer un nombre aléatoire"
         );
 
         int menuEntry = Menu.generateMenu(homeMenu, "\nWhere do you want to go ?", homeMenu.size() + 1);
@@ -125,6 +126,11 @@ public class Main {
             }
 
             System.out.println(cipherBuilder.getEncryptedMessage());
+        } else if (menuEntry == 11) {
+            String seed = inputString("Seed:", "Seed is invalid !");
+            int range = inputInteger("Range:", "Range is invalid !");
+            System.out.println(new Cipher.LFSR(seed).generate(range));
+
         } else {
             System.exit(0);
         }
