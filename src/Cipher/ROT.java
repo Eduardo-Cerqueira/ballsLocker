@@ -27,11 +27,12 @@ public class ROT {
             // Use different ascii index following if letter is lowercase or uppercase
             int letterIndex = validation.isLowerCase(String.valueOf(letter)) ? 97 : 65;
 
-            int newLetterPosition = ((int) letter - letterIndex) < 0 ? 26 : ((int) letter - letterIndex);
+            int letterAlphabetPosition = ((int) letter - letterIndex) < 0 ? 26 : ((int) letter - letterIndex);
+            int letterAlphabetPositionWithRotate = letterAlphabetPosition + numberOfRotate;
+            int letterAlphabetPositionWithoutNegativeValue = letterAlphabetPositionWithRotate < 0 ? 26 + (letterAlphabetPositionWithRotate % 26) : letterAlphabetPositionWithRotate;
+            int letterASCIIPosition = (letterAlphabetPositionWithoutNegativeValue % 26) + letterIndex;
 
-            int finalLetterPosition = (newLetterPosition + numberOfRotate) < 0 ? 26 + ((newLetterPosition + numberOfRotate) % 26) : (newLetterPosition + numberOfRotate);
-
-            encryptedWord.append(letter != ' ' ? (char) ((finalLetterPosition % 26) + letterIndex) : space);
+            encryptedWord.append(letter != ' ' ? (char) letterASCIIPosition : space);
         }
 
         return encryptedWord.toString();
