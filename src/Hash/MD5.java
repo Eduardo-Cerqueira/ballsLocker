@@ -27,4 +27,14 @@ public class MD5 {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     *
+     * @param stringToCompareWithHash Text to compare with hash
+     * @param hash Hash MD5 to match with text
+     * @return Boolean attesting the text integrity
+     */
+    public boolean compare(String stringToCompareWithHash, String hash) {
+        return hash(stringToCompareWithHash).equals(hash);
+    }
 }
