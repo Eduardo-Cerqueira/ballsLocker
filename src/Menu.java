@@ -8,7 +8,7 @@ public class Menu {
      * @param question Question to ask when requesting user input
      * @return User input as integer
      */
-    public int generateMenu(List<String> menu, String question) {
+    public static int generateMenu(List<String> menu, String question) {
         for (int i = 0; i < menu.size(); i++) {
             String string = (i + 1) +
                     ". " +
@@ -26,7 +26,7 @@ public class Menu {
      * @param question Question to ask when requesting user input
      * @return  User input as integer
      */
-    public int interactWithMenu(List<String> menu, String question) {
+    public static int interactWithMenu(List<String> menu, String question) {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
