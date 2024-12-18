@@ -30,7 +30,8 @@ public class Main {
                 new MenuItem("Chiffrer un message avec Polybe", "Vous pouvez chiffrer un message avec l'algorithme Polybe"),
                 new MenuItem("Déchiffrer un message avec Polybe", "Vous pouvez déchiffrer un message avec l'algorithme Polybe"),
                 new MenuItem("Chaine de encryptage", "Vous pouvez chiffrer un message avec plusieurs algorithmes, vous allez être demandé quels algorithmes vous voulez utiliser étape par étape"),
-                new MenuItem("Chaine de decryptage", "Vous pouvez déchiffrer un message avec plusieurs algorithmes, vous allez être demandé quels algorithmes vous voulez utiliser étape par étape")
+                new MenuItem("Chaine de decryptage", "Vous pouvez déchiffrer un message avec plusieurs algorithmes, vous allez être demandé quels algorithmes vous voulez utiliser étape par étape"),
+                new MenuItem("Générer un nombre aléatoire", "Vous pouvez generer un nombre aléatoire à partir d'une chaine de characteres")
         );
 
         MenuBuilder homeMenuBuilder = new MenuBuilder.Builder().menu(homeMenu).onHelpMode(false).helpKey(0).exitKey(homeMenu.size() + 1).build();
@@ -169,9 +170,13 @@ public class Main {
                     }
 
                 }
-
+              
                 System.out.println(cipherBuilder.getEncryptedMessage());
 
+            } else if (menuEntry == 11) {
+                String seed = inputString("Seed:", "Seed is invalid !");
+                int range = inputInteger("Range:", "Range is invalid !");
+                System.out.println(new Cipher.LFSR(seed).generate(range));
             } else if (menuEntry == menuBuilder.getQuitKey()) {
                 System.exit(0);
             }
