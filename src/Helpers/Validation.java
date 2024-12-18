@@ -7,6 +7,12 @@ public class Validation {
         return word.equals(word.toLowerCase());
     }
 
+    /**
+     *
+     * @param question Question displayed to request input
+     * @param errorMessage Message displayed on generic error
+     * @return String from the input
+     */
     public static String inputString(String question, String errorMessage) {
         Scanner scanner = new Scanner(System.in);
 
@@ -25,6 +31,12 @@ public class Validation {
         }
     }
 
+    /**
+     *
+     * @param question Question displayed to request input
+     * @param errorMessage Message displayed on generic error
+     * @return Integer from the input
+     */
     public static int inputInteger(String question, String errorMessage) {
         Scanner scanner = new Scanner(System.in);
 
