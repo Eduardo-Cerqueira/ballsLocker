@@ -1,7 +1,7 @@
 package Helpers;
 
-import Cipher.Polybe;
-import Cipher.ROT;
+import CipherAlgorithm.Polybe;
+import CipherAlgorithm.ROT;
 
 public class CipherBuilder {
     static ROT rot = new ROT();

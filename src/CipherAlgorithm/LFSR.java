@@ -1,4 +1,4 @@
-package Cipher;
+package CipherAlgorithm;
 
 import Helpers.Convert;
 

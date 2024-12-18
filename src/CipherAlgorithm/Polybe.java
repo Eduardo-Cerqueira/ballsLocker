@@ -1,4 +1,4 @@
-package Cipher;
+package CipherAlgorithm;
 
 import java.util.Arrays;
 import java.util.HashMap;
