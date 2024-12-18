@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Validation {
     /**
-     *
+     * Check if a text is LowerCase or UpperCase, return true if it's LowerCase
      * @param word Text to validate/check
      * @return Boolean stating if text is LowerCase or UpperCase
      */
@@ -13,7 +13,7 @@ public class Validation {
     }
 
     /**
-     *
+     * This function prompts for input until valid input is provided (here a string)
      * @param question Question displayed to request input
      * @param errorMessage Message displayed on generic error
      * @return String from the input
@@ -37,7 +37,7 @@ public class Validation {
     }
 
     /**
-     *
+     * This function prompts for input until valid input is provided (here a integer)
      * @param question Question displayed to request input
      * @param errorMessage Message displayed on generic error
      * @return Integer from the input
