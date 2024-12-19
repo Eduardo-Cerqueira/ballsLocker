@@ -6,6 +6,9 @@ import Hash.SHA256;
 import Helpers.CipherBuilder;
 import Menu.DynamicMenu;
 import Struct.MenuItem;
+import TextFileHandler.TextFileHandler;
+import TextFileHandler.FileLine;
+import TextFileHandler.FileType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,6 +40,7 @@ public class Main {
                 new MenuItem("Déchiffrer un message avec Vigenere", "Vous pouvez déchiffrer un message avec l'algorithme de substitution Vigenere, vous devrez saisir une clé et le message à déchiffrer")
         );
 
+        TextFileHandler textFileHandler = new TextFileHandler();
 
         int exitKey = homeMenu.size() + 1;
         int menuEntry = DynamicMenu.generateMenu(homeMenu, "\nWhere do you want to go ?", exitKey, 0);
@@ -49,6 +53,8 @@ public class Main {
 
                 String encryptedWord = rotCipher.encrypt(word, parsedInt, false);
                 System.out.println("Encrypted word is: ".concat(encryptedWord));
+                FileLine line = new FileLine(FileType.ENCRYPTED, encryptedWord, "ROT", new String[]{String.valueOf(parsedInt)});
+                textFileHandler.writeNewLineToFile(line);
 
             } else if (menuEntry == 2) {
                 String word = inputString("Word to decrypt:", "Word is invalid !");

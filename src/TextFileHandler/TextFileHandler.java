@@ -47,13 +47,12 @@ public class TextFileHandler {
 
     /**
      * Write a new line to a file
-     * @param fileType Enum of file types
-     * @param content Content to write to file
+     * @param fileLine File line containing line information
      */
-    public void writeNewLineToFile(FileType fileType, String content) {
-        Path filePath = directoryPath.resolve(fileType.getFileName());
+    public void writeNewLineToFile(FileLine fileLine) {
+        Path filePath = directoryPath.resolve(fileLine.getFileType().getFileName());
         try {
-            Files.writeString(filePath, content + "\n", StandardOpenOption.APPEND);
+            Files.writeString(filePath, fileLine + "\n", StandardOpenOption.APPEND);
         } catch (IOException e) {
             System.out.println("Error writing to file: " + e.getMessage());
         }
@@ -81,7 +80,8 @@ public class TextFileHandler {
 
     public static void main(String[] args) {
         TextFileHandler textFileHandler = new TextFileHandler();
-        textFileHandler.writeNewLineToFile(FileType.ENCRYPTED, "Hello World");
+        FileLine line = new FileLine(FileType.ENCRYPTED, "Hello World", "ROT");
+        textFileHandler.writeNewLineToFile(line);
         String[] lines = textFileHandler.getLinesFromFile(FileType.ENCRYPTED);
         System.out.println(Arrays.toString(lines));
     }
