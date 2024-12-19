@@ -7,6 +7,7 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.Base64;
 
 public class AES {
@@ -50,19 +51,37 @@ public class AES {
         return encryptedString;
     }
 
-    public String decrypt(String encryptedMessage, SecretKey privateKey) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding"); // or AES/CBC/NoPadding
-        cipher.init(Cipher.DECRYPT_MODE, privateKey);
+    public String decrypt(String encryptedMessage, SecretKey privateKey) {
+        String decryptedString = "";
+        try {
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding"); // or AES/CBC/NoPadding
 
-        byte[] plainText = cipher.doFinal(Base64.getDecoder().decode(encryptedMessage));
-        return new String(plainText);
+            cipher.init(Cipher.DECRYPT_MODE, privateKey);
+
+            byte[] plainText = cipher.doFinal(Base64.getDecoder().decode(encryptedMessage));
+            decryptedString = new String(plainText);
+
+
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException |
+                 InvalidKeyException ignored) {
+        }
+        return decryptedString;
     }
 
-    public String decryptWithIV(String encryptedMessage, SecureRandom initializationVector, SecretKey privateKey) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding"); // or AES/CBC/NoPadding
-        cipher.init(Cipher.DECRYPT_MODE, privateKey, initializationVector);
+    public String decryptWithIV(String encryptedMessage, SecureRandom initializationVector, SecretKey privateKey) {
+        String decryptedString = "";
+        try {
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding"); // or AES/CBC/NoPadding
+            cipher.init(Cipher.DECRYPT_MODE, privateKey, initializationVector);
 
-        byte[] plainText = cipher.doFinal(Base64.getDecoder().decode(encryptedMessage));
-        return new String(plainText);
+            byte[] plainText = cipher.doFinal(Base64.getDecoder().decode(encryptedMessage));
+            decryptedString = Arrays.toString(plainText);
+
+
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException |
+                 InvalidKeyException ignored) {
+        }
+
+        return decryptedString;
     }
 }

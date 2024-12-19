@@ -1,13 +1,20 @@
-import Cipher.Polybe;
-import Cipher.ROT;
+import CipherAlgorithm.AES;
+import CipherAlgorithm.Polybe;
+import CipherAlgorithm.ROT;
 import Hash.MD5;
 import Hash.SHA256;
 import Helpers.CipherBuilder;
 import Menu.DynamicMenu;
 import Menu.MenuBuilder;
+import Struct.AESEncryptedWithIV;
 import Struct.MenuItem;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.Key;
+import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 import static Helpers.Validation.inputInteger;
@@ -18,6 +25,7 @@ public class Main {
     static MD5 md5 = new MD5();
     static SHA256 sha256 = new SHA256();
     static Polybe polybe = new Polybe(Polybe.SquareMethode.HORIZONTAL);
+    static AES aes = new AES();
 
     public static void main(String[] args) {
         List<MenuItem> homeMenu = Arrays.asList(
@@ -30,7 +38,9 @@ public class Main {
                 new MenuItem("Chiffrer un message avec Polybe", "Vous pouvez chiffrer un message avec l'algorithme Polybe"),
                 new MenuItem("Déchiffrer un message avec Polybe", "Vous pouvez déchiffrer un message avec l'algorithme Polybe"),
                 new MenuItem("Chaine de encryptage", "Vous pouvez chiffrer un message avec plusieurs algorithmes, vous allez être demandé quels algorithmes vous voulez utiliser étape par étape"),
-                new MenuItem("Chaine de decryptage", "Vous pouvez déchiffrer un message avec plusieurs algorithmes, vous allez être demandé quels algorithmes vous voulez utiliser étape par étape")
+                new MenuItem("Chaine de decryptage", "Vous pouvez déchiffrer un message avec plusieurs algorithmes, vous allez être demandé quels algorithmes vous voulez utiliser étape par étape"),
+                new MenuItem("Chiffrer un message avec AES", "Vous pouvez chiffrer un message avec l'algorithme moderne AES"),
+                new MenuItem("Dechiffrer un message avec AES", "Vous pouvez déchiffrer un message avec l'algorithme moderne AES")
         );
 
         MenuBuilder homeMenuBuilder = new MenuBuilder.Builder().menu(homeMenu).onHelpMode(false).helpKey(0).exitKey(homeMenu.size() + 1).build();
@@ -169,9 +179,30 @@ public class Main {
                     }
 
                 }
-
+                
                 System.out.println(cipherBuilder.getEncryptedMessage());
 
+            } else if (menuEntry == 11) {
+                String message = inputString("Message to encrypt:", "Message is invalid !");
+
+                SecureRandom initializationVector = AES.generateInitializationVector();
+                SecretKey key = AES.generateSecretKey(128);
+                AESEncryptedWithIV encrypted = aes.encryptWithIV(message, initializationVector, key);
+
+                System.out.println("Encrypted String: ".concat(encrypted.encryptedString()));
+                System.out.println("Secret key: ".concat(Arrays.toString(key.getEncoded())));
+            } else if (menuEntry == 12) {
+                String message = inputString("Message to decrypt:", "Message is invalid !");
+                String key = inputString("Private Key/Password:", "Private Key/Password is invalid !");
+
+                SecureRandom initializationVector = AES.generateInitializationVector(); // TODO Import from file or text
+
+                byte[] decodedKey = Base64.getDecoder().decode(key);
+                SecretKey secretKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
+
+                String decrypted = aes.decryptWithIV(message, initializationVector, secretKey);
+
+                System.out.println("Decrypted String: ".concat(decrypted));
             } else if (menuEntry == menuBuilder.getQuitKey()) {
                 System.exit(0);
             }
