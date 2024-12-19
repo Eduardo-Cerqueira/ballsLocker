@@ -1,6 +1,5 @@
 package Steganography;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -30,75 +29,103 @@ public class Decrypt {
         return null;
     }
 
+    /**
+     * Decodes the message from the pixels.
+     * @param pixels The pixels to decode.
+     * @return The decoded message.
+     */
     private static String decodeMessageFromPixels(Pixel[] pixels) {
         boolean completed = false;
         int pixelArrayIndex = 0;
         StringBuilder messageBuilder = new StringBuilder();
         while(!completed) {
+            // Read 3 pixels
             Pixel[] pixelsToRead = new Pixel[3];
             for(int i = 0; i < 3; i++) {
                 pixelsToRead[i] = pixels[pixelArrayIndex];
                 pixelArrayIndex++;
             }
-            messageBuilder.append(ConvertPixelsToCharacter(pixelsToRead));
-            if(IsEndOfMessage(pixelsToRead[2])) {
+            // Convert the 3 pixels to a character
+            messageBuilder.append(convertPixelsToCharacter(pixelsToRead));
+            // Check if the message has ended
+            if(isEndOfMessage(pixelsToRead[2])) {
                 completed = true;
             }
         }
         return messageBuilder.toString();
     }
 
-    private static char ConvertPixelsToCharacter(Pixel[] pixelsToRead) {
-        ArrayList<String> binaryValues = new ArrayList<String>();
-        for(int i = 0; i < pixelsToRead.length; i++) {
-            String[] currentBinary = TurnPixelIntegersToBinary(pixelsToRead[i]);
+    /**
+     * Converts 3 pixels to a character.
+     * @param pixelsToRead The pixels to convert.
+     * @return The character.
+     */
+    private static char convertPixelsToCharacter(Pixel[] pixelsToRead) {
+        ArrayList<String> binaryValues = new ArrayList<>();
+        for (Pixel pixel : pixelsToRead) {
+            String[] currentBinary = convertPixelToBinary(pixel);
             binaryValues.add(currentBinary[0]);
             binaryValues.add(currentBinary[1]);
             binaryValues.add(currentBinary[2]);
         }
-        return ConvertBinaryValuesToCharacter(binaryValues);
+        return convertBinaryValuesToCharacter(binaryValues);
     }
 
-    private static String[] TurnPixelIntegersToBinary(Pixel pixel) {
-        String[] values = new String[3];
-        values[0] = Integer.toBinaryString(pixel.getColor().getRed());
-        values[1] = Integer.toBinaryString(pixel.getColor().getGreen());
-        values[2] = Integer.toBinaryString(pixel.getColor().getBlue());
-        return values;
+    /**
+     * Converts a pixel to a binary string array.
+     * @param pixel The pixel to convert.
+     * @return The binary string array.
+     */
+    private static String[] convertPixelToBinary(Pixel pixel) {
+        return new String[] {
+            Integer.toBinaryString(pixel.getColor().getRed()),
+            Integer.toBinaryString(pixel.getColor().getGreen()),
+            Integer.toBinaryString(pixel.getColor().getBlue())
+        };
     }
 
-    private static boolean IsEndOfMessage(Pixel pixel) {
-        if(TurnPixelIntegersToBinary(pixel)[2].endsWith("1")) {
-            return false;
-        }
-        return true;
+    /**
+     * Check if the message has ended.
+     * If the blue component of the pixel equals 1 : the message has not ended.
+     * @param pixel The pixel to check.
+     * @return True if the message has ended, false otherwise.
+     */
+    private static boolean isEndOfMessage(Pixel pixel) {
+        return !convertPixelToBinary(pixel)[2].endsWith("1");
     }
 
-    private static char ConvertBinaryValuesToCharacter(ArrayList<String> binaryValues) {
-        StringBuilder endBinary = new StringBuilder("");
+    /**
+     * Converts an array of binary values to a character.
+     * @param binaryValues The binary values to convert.
+     * @return The character.
+     */
+    private static char convertBinaryValuesToCharacter(ArrayList<String> binaryValues) {
+        StringBuilder endBinary = new StringBuilder();
         for(int i = 0; i < binaryValues.size()-1; i++) {
+            // Append the last bit of each binary value
             endBinary.append(binaryValues.get(i).charAt(binaryValues.get(i).length()-1));
         }
         String endBinaryString = endBinary.toString();
-        String noZeros = RemovePaddedZeros(endBinaryString);
+        // Remove padded zeros
+        String noZeros = removePaddedZeros(endBinaryString);
+        // Convert the binary string to an ASCII character
         int ascii = Integer.parseInt(noZeros, 2);
+        // Return the character
         return (char) ascii;
     }
 
-    private static String RemovePaddedZeros(String endBinary) {
-        StringBuilder builder = new StringBuilder(endBinary);
+    /**
+     * Removes the padded zeros from the binary string.
+     * @param endBinary The binary string to remove the padded zeros from.
+     * @return The binary string without the padded zeros.
+     */
+    private static String removePaddedZeros(String endBinary) {
         int paddedZeros = 0;
-        for(int i = 0; i < builder.length(); i++) {
-            if(builder.charAt(i) == '0') {
-                paddedZeros++;
-            }
-            else {
-                break;
-            }
+        // While the character is a zero and the padded zeros are less than the length of the binary string
+        while (paddedZeros < endBinary.length() && endBinary.charAt(paddedZeros) == '0') {
+            paddedZeros++;
         }
-        for(int i = 0 ; i < paddedZeros; i++) {
-            builder.deleteCharAt(0);
-        }
-        return builder.toString();
+        return endBinary.substring(paddedZeros);
     }
+
 }
