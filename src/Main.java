@@ -4,7 +4,6 @@ import Hash.MD5;
 import Hash.SHA256;
 import Helpers.CipherBuilder;
 import Menu.DynamicMenu;
-import Menu.MenuBuilder;
 import Struct.MenuItem;
 
 import java.util.Arrays;
@@ -34,28 +33,13 @@ public class Main {
                 new MenuItem("Générer un nombre aléatoire", "Vous pouvez generer un nombre aléatoire à partir d'une chaine de characteres")
         );
 
-        MenuBuilder homeMenuBuilder = new MenuBuilder.Builder().menu(homeMenu).onHelpMode(false).helpKey(0).exitKey(homeMenu.size() + 1).build();
-        MenuBuilder menuBuilder = homeMenuBuilder;
 
-        int menuEntry = DynamicMenu.generateMenu(menuBuilder);
-        boolean firstRun = true;
+        int exitKey = homeMenu.size() + 1;
+        int menuEntry = DynamicMenu.generateMenu(homeMenu, "\nWhere do you want to go ?", exitKey, 0);
+        System.out.println("Menu entry " + menuEntry + " has been choosen !");
 
         while (true) {
-            if ((menuEntry == menuBuilder.getQuitKey()) && !firstRun) {
-                menuEntry = DynamicMenu.generateMenu(homeMenuBuilder);
-            } else if (menuEntry == menuBuilder.getHelpKey()) {
-                menuEntry = DynamicMenu.generateMenu(menuBuilder);
-            } else {
-                firstRun = false;
-            }
-
-            System.out.println("Menu entry " + menuEntry + " has been choosen !");
-
-            if (menuEntry == menuBuilder.getHelpKey()) {
-                menuBuilder = new MenuBuilder.Builder().menu(menuBuilder.getMenu()).onHelpMode(true).exitKey(menuBuilder.getHelpKey()).build();
-                DynamicMenu.generateMenu(menuBuilder);
-                menuBuilder = new MenuBuilder.Builder().menu(menuBuilder.getMenu()).onHelpMode(false).helpKey(menuBuilder.getHelpKey()).exitKey(menuBuilder.getMenu().size() + 1).build();
-            } else if (menuEntry == 1) {
+            if (menuEntry == 1) {
                 String word = inputString("Word to encrypt:", "Word is invalid !");
                 int parsedInt = inputInteger("Number of rotate:", "Number is invalid !");
 
@@ -93,25 +77,18 @@ public class Main {
                 String word = inputString("Word to decrypt:", "Word is invalid !");
                 System.out.println(polybe.decrypt(word));
             } else if (menuEntry == 9) {
-            String word = inputString("Word to encrypt:", "Word is invalid !");
-            CipherBuilder cipherBuilder = new CipherBuilder(word);
+                String word = inputString("Word to encrypt:", "Word is invalid !");
+                CipherBuilder cipherBuilder = new CipherBuilder(word);
 
-            boolean addAlgorithm = true;
+                boolean addAlgorithm = true;
+                while (addAlgorithm) {
+                    List<MenuItem> algorithmsMenu = Arrays.asList(
+                            new MenuItem("Ajouter du Rot encrypt", "Ajouter un chiffrement sur le message actuel (encrypté ou non) avec l'algorithme de substitution ROT, vous devrez saisir le nombre de rotation entre votre lettre et la lettre chiffrée"),
+                            new MenuItem("Ajouter du Polybe encrypt", "Ajouter un chiffrement sur le message actuel (encrypté ou non) avec l'algorithme de Polybe")
+                    );
 
-                List<MenuItem> algorithmsMenu = Arrays.asList(
-                        new MenuItem("Ajouter du Rot encrypt", "Ajouter un chiffrement sur le message actuel (encrypté ou non) avec l'algorithme de substitution ROT, vous devrez saisir le nombre de rotation entre votre lettre et la lettre chiffrée"),
-                        new MenuItem("Ajouter du Polybe encrypt", "Ajouter un chiffrement sur le message actuel (encrypté ou non) avec l'algorithme de Polybe")
-                );
+                    int algorithmsMenuEntry = DynamicMenu.generateMenu(algorithmsMenu, "\nWhere do you want to go ?", algorithmsMenu.size() + 1, 0);
 
-            while (addAlgorithm) {
-                menuBuilder = new MenuBuilder.Builder().menu(algorithmsMenu).onHelpMode(false).helpKey(0).exitKey(homeMenu.size() + 1).build();
-                int algorithmsMenuEntry = DynamicMenu.generateMenu(menuBuilder);
-
-                if (algorithmsMenuEntry == menuBuilder.getHelpKey()) {
-                    menuBuilder = new MenuBuilder.Builder().menu(menuBuilder.getMenu()).onHelpMode(true).exitKey(menuBuilder.getHelpKey()).build();
-                    DynamicMenu.generateMenu(menuBuilder);
-                    menuBuilder = new MenuBuilder.Builder().menu(menuBuilder.getMenu()).onHelpMode(false).helpKey(menuBuilder.getHelpKey()).exitKey(menuBuilder.getMenu().size() + 1).build();
-                } else {
                     switch (algorithmsMenuEntry) {
                         case 1:
                             int parsedInt = inputInteger("Number of rotate:", "Number is invalid !");
@@ -123,63 +100,53 @@ public class Main {
                             System.out.println(cipherBuilder.getEncryptedMessage());
                             break;
                         default:
-                            menuEntry = algorithmsMenuEntry;
                             addAlgorithm = false;
                             break;
                     }
                 }
-            }
 
-            System.out.println(cipherBuilder.getEncryptedMessage());
+                System.out.println(cipherBuilder.getEncryptedMessage());
 
-        } else if (menuEntry == 10) {
+            } else if (menuEntry == 10) {
                 String word = inputString("Word to decrypt:", "Word is invalid !");
                 CipherBuilder cipherBuilder = new CipherBuilder(word);
 
                 boolean addAlgorithm = true;
-
-                List<MenuItem> algorithmsMenu = Arrays.asList(
-                        new MenuItem("Ajouter du Rot decrypt", "Déchiffrer le message actuel (encrypté ou non) avec l'algorithme de substitution ROT, vous devrez saisir le nombre de rotation entre votre lettre chiffrée et la lettre non chiffrée"),
-                        new MenuItem("Ajouter du Polybe decrypt", "Déchiffrer le message actuel (encrypté ou non) avec l'algorithme de Polybe")
-                );
-
                 while (addAlgorithm) {
-                    menuBuilder = new MenuBuilder.Builder().menu(algorithmsMenu).onHelpMode(false).helpKey(0).exitKey(homeMenu.size() + 1).build();
-                    int algorithmsMenuEntry = DynamicMenu.generateMenu(menuBuilder);
+                    List<MenuItem> algorithmsMenu = Arrays.asList(
+                            new MenuItem("Ajouter du Rot decrypt", "Déchiffrer le message actuel (encrypté ou non) avec l'algorithme de substitution ROT, vous devrez saisir le nombre de rotation entre votre lettre chiffrée et la lettre non chiffrée"),
+                            new MenuItem("Ajouter du Polybe decrypt", "Déchiffrer le message actuel (encrypté ou non) avec l'algorithme de Polybe")
+                    );
 
-                    if (algorithmsMenuEntry == menuBuilder.getHelpKey()) {
-                        menuBuilder = new MenuBuilder.Builder().menu(menuBuilder.getMenu()).onHelpMode(true).exitKey(menuBuilder.getHelpKey()).build();
-                        DynamicMenu.generateMenu(menuBuilder);
-                        menuBuilder = new MenuBuilder.Builder().menu(menuBuilder.getMenu()).onHelpMode(false).helpKey(menuBuilder.getHelpKey()).exitKey(menuBuilder.getMenu().size() + 1).build();
-                    } else {
-                        switch (algorithmsMenuEntry) {
-                            case 1:
-                                int parsedInt = inputInteger("Number of rotate:", "Number is invalid !");
-                                cipherBuilder.decryptROT(parsedInt);
-                                System.out.println(cipherBuilder.getEncryptedMessage());
-                                break;
-                            case 2:
-                                cipherBuilder.decryptPolybe();
-                                System.out.println(cipherBuilder.getEncryptedMessage());
-                                break;
-                            default:
-                                menuEntry = algorithmsMenuEntry;
-                                addAlgorithm = false;
-                                break;
-                        }
+                    int algorithmsMenuEntry = DynamicMenu.generateMenu(algorithmsMenu, "\nWhere do you want to go ?", algorithmsMenu.size() + 1, 0);
+
+                    switch (algorithmsMenuEntry) {
+                        case 1:
+                            int parsedInt = inputInteger("Number of rotate:", "Number is invalid !");
+                            cipherBuilder.decryptROT(parsedInt);
+                            System.out.println(cipherBuilder.getEncryptedMessage());
+                            break;
+                        case 2:
+                            cipherBuilder.decryptPolybe();
+                            System.out.println(cipherBuilder.getEncryptedMessage());
+                            break;
+                        default:
+                            addAlgorithm = false;
+                            break;
                     }
-
                 }
-              
-                System.out.println(cipherBuilder.getEncryptedMessage());
 
+                System.out.println(cipherBuilder.getEncryptedMessage());
             } else if (menuEntry == 11) {
                 String seed = inputString("Seed:", "Seed is invalid !");
                 int range = inputInteger("Range:", "Range is invalid !");
                 System.out.println(new Cipher.LFSR(seed).generate(range));
-            } else if (menuEntry == menuBuilder.getQuitKey()) {
+
+            } else if (menuEntry == exitKey) {
                 System.exit(0);
             }
+
+            menuEntry = DynamicMenu.generateMenu(homeMenu, "\nWhere do you want to go ?", homeMenu.size() + 1, 0);
         }
     }
 }
