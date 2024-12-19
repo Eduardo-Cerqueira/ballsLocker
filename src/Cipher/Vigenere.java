@@ -2,7 +2,12 @@ package Cipher;
 
 public class Vigenere {
 
-  //Method to encrypt a text with a given key
+  /**
+   * Encrypts a plaintext using the Vigenere cipher with the specified key.
+   * @param plaintext The plaintext to encrypt.
+   * @param key The key to use for encryption.
+   * @return The encrypted ciphertext.
+   */
   public static String encrypt(String plaintext, String key) {  
     StringBuilder ciphertext = new StringBuilder();  
     
@@ -32,7 +37,12 @@ public class Vigenere {
     return ciphertext.toString();  
   }  
 
-  //Method to decrypt a text with a given key
+  /**
+   * Decrypts a ciphertext using the Vigenere cipher with the specified key.
+   * @param ciphertext The ciphertext to decrypt.
+   * @param key The key to use for decryption.
+   * @return The decrypted plaintext.
+   */
   public static String decrypt(String ciphertext, String key) {  
     StringBuilder plaintext = new StringBuilder();  
     
@@ -65,7 +75,7 @@ public class Vigenere {
   //Main method for testing encryption and decryption
   public static void main(String[] args) {  
     String originalMessage = "Hello World!! We'll TEST IF this is secure and IF IT WORk";  
-    String key = "CLEtest";  
+    String key = "BBBB";
     
     String encryptedMessage = encrypt(originalMessage, key);  
     System.out.println("Encrypted message: " + encryptedMessage);  
