@@ -1,9 +1,18 @@
 package Menu;
 
+import Cipher.Polybe;
+import Cipher.ROT;
+import Cipher.Vigenere;
+import Hash.MD5;
+import Hash.SHA256;
+import Helpers.CipherBuilder;
 import Struct.MenuItem;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static Helpers.Validation.inputInteger;
+import static Helpers.Validation.inputString;
 
 public class Menus {
     public static final List<MenuItem> HomeMenu = Arrays.asList(
@@ -31,4 +40,130 @@ public class Menus {
             new MenuItem("Ajouter du Rot decrypt", "Déchiffrer le message actuel (encrypté ou non) avec l'algorithme de substitution ROT, vous devrez saisir le nombre de rotation entre votre lettre chiffrée et la lettre non chiffrée"),
             new MenuItem("Ajouter du Polybe decrypt", "Déchiffrer le message actuel (encrypté ou non) avec l'algorithme de Polybe")
     );
+
+    public static void displayROTEncryptionMenu() {
+        String word = inputString("Word to encrypt:", "Word is invalid !");
+        int parsedInt = inputInteger("Number of rotate:", "Number is invalid !");
+
+        String encryptedWord = ROT.encrypt(word, parsedInt, false);
+        System.out.println("Encrypted word is: ".concat(encryptedWord));
+    }
+
+    public static void displayROTDecryptionMenu() {
+        String word = inputString("Word to decrypt:", "Word is invalid !");
+        int parsedInt = inputInteger("Number of rotate:", "Number is invalid !");
+
+        String encryptedWord = ROT.decrypt(word, parsedInt);
+        System.out.println("Decrypted word is: ".concat(encryptedWord));
+    }
+
+    public static void displayMD5HashMenu() {
+        String word = inputString("Word to hash:", "Word is invalid !");
+        System.out.println(MD5.hash(word));
+    }
+
+    public static void displaySHA256HashMenu() {
+        String word = inputString("Word to hash:", "Word is invalid !");
+        System.out.println(SHA256.hash(word));
+    }
+
+    public static void displayMD5CompareHashMenu() {
+        String word = inputString("Word to compare with hash:", "Word is invalid !");
+        String hash = inputString("Hash:", "Hash is invalid !");
+        System.out.println(MD5.compare(word, hash));
+    }
+
+    public static void displaySHA256CompareHashMenu() {
+        String word = inputString("Word to compare with hash:", "Word is invalid !");
+        String hash = inputString("Hash:", "Hash is invalid !");
+        System.out.println(SHA256.compare(word, hash));
+    }
+
+    public static void displayPolybeEncryptionMenu() {
+        Polybe polybe = new Polybe(Polybe.SquareMethode.HORIZONTAL);
+
+        String word = inputString("Word to encrypt:", "Word is invalid !");
+        System.out.println(polybe.encrypt(word));
+    }
+
+    public static void displayPolybeDecryptionMenu() {
+        Polybe polybe = new Polybe(Polybe.SquareMethode.HORIZONTAL);
+
+        String word = inputString("Word to decrypt:", "Word is invalid !");
+        System.out.println(polybe.decrypt(word));
+    }
+
+    public static void displayCipherBuilderEncryptionMenu() {
+        String word = inputString("Word to encrypt:", "Word is invalid !");
+        CipherBuilder cipherBuilder = new CipherBuilder(word);
+
+        boolean addAlgorithm = true;
+        while (addAlgorithm) {
+
+            int algorithmsMenuEntry = DynamicMenu.generateMenu(Menus.EncryptionChainMenu, "\nWhere do you want to go ?", Menus.EncryptionChainMenu.size() + 1, 0);
+
+            switch (algorithmsMenuEntry) {
+                case 1:
+                    int parsedInt = inputInteger("Number of rotate:", "Number is invalid !");
+                    cipherBuilder.encryptROT(parsedInt, true);
+                    System.out.println(cipherBuilder.getEncryptedMessage());
+                    break;
+                case 2:
+                    cipherBuilder.encryptPolybe();
+                    System.out.println(cipherBuilder.getEncryptedMessage());
+                    break;
+                default:
+                    addAlgorithm = false;
+                    break;
+            }
+        }
+
+        System.out.println(cipherBuilder.getEncryptedMessage());
+    }
+
+    public static void displayCipherBuilderDecryptionMenu() {
+        String word = inputString("Word to decrypt:", "Word is invalid !");
+        CipherBuilder cipherBuilder = new CipherBuilder(word);
+
+        boolean addAlgorithm = true;
+        while (addAlgorithm) {
+
+            int algorithmsMenuEntry = DynamicMenu.generateMenu(Menus.DecryptionChainMenu, "\nWhere do you want to go ?", Menus.DecryptionChainMenu.size() + 1, 0);
+
+            switch (algorithmsMenuEntry) {
+                case 1:
+                    int parsedInt = inputInteger("Number of rotate:", "Number is invalid !");
+                    cipherBuilder.decryptROT(parsedInt);
+                    System.out.println(cipherBuilder.getEncryptedMessage());
+                    break;
+                case 2:
+                    cipherBuilder.decryptPolybe();
+                    System.out.println(cipherBuilder.getEncryptedMessage());
+                    break;
+                default:
+                    addAlgorithm = false;
+                    break;
+            }
+        }
+
+        System.out.println(cipherBuilder.getEncryptedMessage());
+    }
+
+    public static void displayGenerateRandomNumber() {
+        String seed = inputString("Seed:", "Seed is invalid !");
+        int range = inputInteger("Range:", "Range is invalid !");
+        System.out.println(new Cipher.LFSR(seed).generate(range));
+    }
+
+    public static void displayVigenereEncryptionMenu() {
+        String word = inputString("Word to encrypt:", "Word is invalid !");
+        String key = inputString("Key:", "Key is invalid !");
+        System.out.println(Vigenere.encrypt(word, key));
+    }
+
+    public static void displayVigenereDecryptionMenu() {
+        String word = inputString("Word to decrypt:", "Word is invalid !");
+        String key = inputString("Key:", "Key is invalid !");
+        System.out.println(Vigenere.decrypt(word, key));
+    }
 }

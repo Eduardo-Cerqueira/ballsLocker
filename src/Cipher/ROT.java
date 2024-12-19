@@ -13,7 +13,7 @@ public class ROT {
      * @param removeSpaces If the encrypted sentence should keep the spaces
      * @return Encrypted word/sentence
      */
-    public String encrypt(String wordToEncrypt, int numberOfRotate, boolean removeSpaces) {
+    public static String encrypt(String wordToEncrypt, int numberOfRotate, boolean removeSpaces) {
         String space = removeSpaces ? "" : " ";
 
         // Remove all special characters
@@ -44,7 +44,7 @@ public class ROT {
      * @param numberOfRotate Number of letter rotations to use (should be the same used during encryption)
      * @return Decrypted word/sentence
      */
-    public String decrypt(String wordToEncrypt, int numberOfRotate) {
+    public static String decrypt(String wordToEncrypt, int numberOfRotate) {
         StringBuilder encryptedWord = new StringBuilder();
 
         for (int i = 0; i < wordToEncrypt.length(); i++) {
