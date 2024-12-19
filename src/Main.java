@@ -1,5 +1,6 @@
 import Cipher.Polybe;
 import Cipher.ROT;
+import Cipher.Vigenere;
 import Hash.MD5;
 import Hash.SHA256;
 import Helpers.CipherBuilder;
@@ -17,6 +18,7 @@ public class Main {
     static MD5 md5 = new MD5();
     static SHA256 sha256 = new SHA256();
     static Polybe polybe = new Polybe(Polybe.SquareMethode.HORIZONTAL);
+    static Vigenere vigenere = new Vigenere();
 
     public static void main(String[] args) {
         List<MenuItem> homeMenu = Arrays.asList(
@@ -30,7 +32,9 @@ public class Main {
                 new MenuItem("Déchiffrer un message avec Polybe", "Vous pouvez déchiffrer un message avec l'algorithme Polybe"),
                 new MenuItem("Chaine de encryptage", "Vous pouvez chiffrer un message avec plusieurs algorithmes, vous allez être demandé quels algorithmes vous voulez utiliser étape par étape"),
                 new MenuItem("Chaine de decryptage", "Vous pouvez déchiffrer un message avec plusieurs algorithmes, vous allez être demandé quels algorithmes vous voulez utiliser étape par étape"),
-                new MenuItem("Générer un nombre aléatoire", "Vous pouvez generer un nombre aléatoire à partir d'une chaine de characteres")
+                new MenuItem("Générer un nombre aléatoire", "Vous pouvez generer un nombre aléatoire à partir d'une chaine de characteres"),
+                new MenuItem("Chiffrer un message avec Vigenere", "Vous pouvez chiffrer un message avec l'algorithme de substitution Vigenere, vous devrez saisir une clé et le message à chiffrer"),
+                new MenuItem("Déchiffrer un message avec Vigenere", "Vous pouvez déchiffrer un message avec l'algorithme de substitution Vigenere, vous devrez saisir une clé et le message à déchiffrer")
         );
 
 
@@ -142,6 +146,14 @@ public class Main {
                 int range = inputInteger("Range:", "Range is invalid !");
                 System.out.println(new Cipher.LFSR(seed).generate(range));
 
+            } else if(menuEntry == 12) {
+                String word = inputString("Word to encrypt:", "Word is invalid !");
+                String key = inputString("Key:", "Key is invalid !");
+                System.out.println(vigenere.encrypt(word, key));
+            } else if(menuEntry == 13) {
+                String word = inputString("Word to decrypt:", "Word is invalid !");
+                String key = inputString("Key:", "Key is invalid !");
+                System.out.println(vigenere.decrypt(word, key));
             } else if (menuEntry == exitKey) {
                 System.exit(0);
             }

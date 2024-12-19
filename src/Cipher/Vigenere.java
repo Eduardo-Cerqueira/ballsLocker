@@ -8,7 +8,7 @@ public class Vigenere {
    * @param key The key to use for encryption.
    * @return The encrypted ciphertext.
    */
-  public static String encrypt(String plaintext, String key) {  
+  public String encrypt(String plaintext, String key) {
     StringBuilder ciphertext = new StringBuilder();  
     
     // Iterate through the plaintext  
@@ -43,7 +43,7 @@ public class Vigenere {
    * @param key The key to use for decryption.
    * @return The decrypted plaintext.
    */
-  public static String decrypt(String ciphertext, String key) {  
+  public String decrypt(String ciphertext, String key) {
     StringBuilder plaintext = new StringBuilder();  
     
     // Iterate through the ciphertext  
@@ -70,18 +70,6 @@ public class Vigenere {
     }  
     
     return plaintext.toString();  
-  }  
-
-  //Main method for testing encryption and decryption
-  public static void main(String[] args) {  
-    String originalMessage = "Hello World!! We'll TEST IF this is secure and IF IT WORk";  
-    String key = "BBBB";
-    
-    String encryptedMessage = encrypt(originalMessage, key);  
-    System.out.println("Encrypted message: " + encryptedMessage);  
-    
-    String decryptedMessage = decrypt(encryptedMessage, key);  
-    System.out.println("Decrypted message: " + decryptedMessage);  
-  }  
+  }
 }
 
