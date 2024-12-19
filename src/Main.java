@@ -6,13 +6,9 @@ import Hash.SHA256;
 import Helpers.CipherBuilder;
 import Menu.DynamicMenu;
 import Menu.MenuBuilder;
-import Struct.AESEncryptedWithIV;
 import Struct.MenuItem;
 
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-import java.security.Key;
-import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -185,24 +181,20 @@ public class Main {
             } else if (menuEntry == 11) {
                 String message = inputString("Message to encrypt:", "Message is invalid !");
 
-                SecureRandom initializationVector = AES.generateInitializationVector();
-                SecretKey key = AES.generateSecretKey(128);
-                AESEncryptedWithIV encrypted = aes.encryptWithIV(message, initializationVector, key);
+                SecretKey secretKey = aes.generateSecretKey(128);
+                String encrypted = aes.encrypt(message, secretKey);
 
-                System.out.println("Encrypted String: ".concat(encrypted.encryptedString()));
-                System.out.println("Secret key: ".concat(Arrays.toString(key.getEncoded())));
+                System.out.println("Message chiffré : " + encrypted);
+                System.out.println("Clé secrète : " + Base64.getEncoder().encodeToString(secretKey.getEncoded()));
+
             } else if (menuEntry == 12) {
                 String message = inputString("Message to decrypt:", "Message is invalid !");
                 String key = inputString("Private Key/Password:", "Private Key/Password is invalid !");
 
-                SecureRandom initializationVector = AES.generateInitializationVector(); // TODO Import from file or text
+                SecretKey secretKey = aes.loadKeyFromString(key);
+                String decryptedText = aes.decrypt(message, secretKey);
 
-                byte[] decodedKey = Base64.getDecoder().decode(key);
-                SecretKey secretKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
-
-                String decrypted = aes.decryptWithIV(message, initializationVector, secretKey);
-
-                System.out.println("Decrypted String: ".concat(decrypted));
+                System.out.println("Message déchiffré : " + decryptedText);
             } else if (menuEntry == menuBuilder.getQuitKey()) {
                 System.exit(0);
             }
