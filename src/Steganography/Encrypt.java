@@ -10,6 +10,8 @@ import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 
+import static Steganography.Common.extractPixels;
+
 
 public class Encrypt {
     /**
@@ -31,12 +33,14 @@ public class Encrypt {
             // Create a new image with the same properties as the original image
             BufferedImage imageToEncrypt = copyImage(image);
             // Extract the pixels from the image
-            Pixel[] pixels = extractPixels(imageToEncrypt);
+            Pixel[] pixels = Common.extractPixels(imageToEncrypt);
             // Convert the message to a binary array
             String[] messageInBinary = convertMessageToBinaryArray(message);
             // Encode the message in the pixels
             encodeMessageBinaryInPixels(pixels, messageInBinary);
+            // Replace the pixels in a new BufferedImage
             replacePixelsInNewBufferedImage(pixels, image);
+            // Save the new image to a file
             saveNewFile(image, newImageFile);
         } catch (IOException e) {
             e.printStackTrace();
@@ -58,28 +62,6 @@ public class Encrypt {
         // Create a new image with the same properties as the original image
         return new BufferedImage(colorModel, raster, isAlphaPremultiplied, null);
     }
-
-    /**
-     * Extract the pixels from the image.
-     * @param imageToEncrypt The image to encrypt.
-     * @return The pixels of the image.
-     */
-    private static Pixel[] extractPixels(BufferedImage imageToEncrypt){
-        int height = imageToEncrypt.getHeight();
-        int width = imageToEncrypt.getWidth();
-        // Create an array of empty pixels
-        Pixel[] pixels = new Pixel[height * width];
-        int count = 0;
-        for(int x = 0; x < width; x++) {
-            for(int y = 0; y < height; y++) {
-                // Get the color of the pixel at the specified coordinates
-                Color colorToAdd = new Color(imageToEncrypt.getRGB(x, y));
-                pixels[count] = new Pixel(x, y, colorToAdd);
-                count++;
-            }
-        }
-        return pixels;
-    };
 
     /**
      * Convert the message to a binary array.

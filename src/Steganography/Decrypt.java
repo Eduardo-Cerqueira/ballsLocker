@@ -9,47 +9,39 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 public class Decrypt {
-    public static void Decrypt() {
-        String newImageFileString = "export.png";
-        File newImageFile = new File(newImageFileString);
-        BufferedImage image;
+    /**
+     * Decrypts the message in the image.
+     * @param inputImagePath The path of the image to decrypt.
+     * @return The decrypted message.
+     */
+    public static String decrypt(String inputImagePath) {
+        // Get input file by path
+        File inputFile = new File(inputImagePath);
         try {
-            image = ImageIO.read(newImageFile);
-            Pixel[] pixels = GetPixelArray(image);
-            System.out.println(DecodeMessageFromPixels(pixels));
+            // Read image
+            BufferedImage image = ImageIO.read(inputFile);
+            // Extract the pixels from the image
+            Pixel[] pixels = Common.extractPixels(image);
+            // Return decoded message
+            return decodeMessageFromPixels(pixels);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
-    private static Pixel[] GetPixelArray(BufferedImage imageToEncrypt){
-        int height = imageToEncrypt.getHeight();
-        int width = imageToEncrypt.getWidth();
-        Pixel[] pixels = new Pixel[height * width];
-
-        int count = 0;
-        for(int x = 0; x < width; x++) {
-            for(int y = 0; y < height; y++) {
-                Color colorToAdd = new Color(imageToEncrypt.getRGB(x, y));
-                pixels[count] = new Pixel(x, y, colorToAdd);
-                count++;
-            }
-        }
-        return pixels;
-    };
-
-    private static String DecodeMessageFromPixels(Pixel[] pixels) {
+    private static String decodeMessageFromPixels(Pixel[] pixels) {
         boolean completed = false;
         int pixelArrayIndex = 0;
-        StringBuilder messageBuilder = new StringBuilder("");
-        while(completed == false) {
+        StringBuilder messageBuilder = new StringBuilder();
+        while(!completed) {
             Pixel[] pixelsToRead = new Pixel[3];
             for(int i = 0; i < 3; i++) {
                 pixelsToRead[i] = pixels[pixelArrayIndex];
                 pixelArrayIndex++;
             }
             messageBuilder.append(ConvertPixelsToCharacter(pixelsToRead));
-            if(IsEndOfMessage(pixelsToRead[2]) == true) {
+            if(IsEndOfMessage(pixelsToRead[2])) {
                 completed = true;
             }
         }

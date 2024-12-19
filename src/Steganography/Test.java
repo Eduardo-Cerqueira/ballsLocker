@@ -5,10 +5,9 @@ public class Test {
         String inputImagePath = "image.png";
         String outputImagePath = "export.png";
         String message = "Salut l'équipe !";
-        Encrypt encrypt = new Encrypt();
-        Decrypt decrypt = new Decrypt();
 
-        encrypt.encrypt(inputImagePath, outputImagePath, message);
-        decrypt.Decrypt();
+        Encrypt.encrypt(inputImagePath, outputImagePath, message);
+        String decryptedMessage = Decrypt.decrypt(outputImagePath);
+        System.out.println(decryptedMessage);
     }
 }
