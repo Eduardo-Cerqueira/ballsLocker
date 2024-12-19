@@ -53,7 +53,7 @@ public class Main {
 
                 String encryptedWord = rotCipher.encrypt(word, parsedInt, false);
                 System.out.println("Encrypted word is: ".concat(encryptedWord));
-                FileLine line = new FileLine(FileType.ENCRYPTED, encryptedWord, "ROT", new String[]{String.valueOf(parsedInt)});
+                FileLine line = new FileLine(FileType.ENCRYPTED, encryptedWord, "ROT");
                 textFileHandler.writeNewLineToFile(line);
 
             } else if (menuEntry == 2) {
