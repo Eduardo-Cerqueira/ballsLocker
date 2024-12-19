@@ -10,9 +10,6 @@ import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 
-import static Steganography.Common.extractPixels;
-
-
 public class Encrypt {
     /**
      * Encrypts the message in the image.
@@ -180,11 +177,11 @@ public class Encrypt {
      * @param newImage The new image.
      */
     private static void replacePixelsInNewBufferedImage(Pixel[] newPixels, BufferedImage newImage) {
-        for(int i = 0; i < newPixels.length; i++) {
+        for (Pixel newPixel : newPixels) {
             // Set the color of the pixel at the specified coordinates
-            newImage.setRGB(newPixels[i].getX(), newPixels[i].getY(), newPixels[i].getColor().getRGB());
+            newImage.setRGB(newPixel.getX(), newPixel.getY(), newPixel.getColor().getRGB());
         }
-    };
+    }
 
     /**
      * Save the new image to a file.
