@@ -14,8 +14,9 @@ public class Decrypt {
      * @return The decrypted message.
      */
     public static String decrypt(String inputImagePath) {
+        String directory = "images/";
         // Get input file by path
-        File inputFile = new File(inputImagePath);
+        File inputFile = new File(directory + inputImagePath);
         try {
             // Read image
             BufferedImage image = ImageIO.read(inputFile);

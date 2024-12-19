@@ -17,15 +17,16 @@ public class Encrypt {
     /**
      * Encrypts the message in the image.
      * @param inputFilePath The path of the image to encrypt.
-     * @param outputFilePath The path of the new image with the encrypted message.
      * @param message The message to encrypt.
      */
-    public static void encrypt(String inputFilePath, String outputFilePath, String message) {
+    public static void encrypt(String inputFilePath, String message) {
 
+        String directory = "images/";
         // Get input file by path
-        File inputFile = new File(inputFilePath);
+        File inputFile = new File(directory + inputFilePath);
         // Get output file by path
-        File newImageFile = new File(outputFilePath);
+        String outputImagePath = "export-" + inputFilePath;
+        File newImageFile = new File(directory + outputImagePath);
 
         try {
             // Read image
