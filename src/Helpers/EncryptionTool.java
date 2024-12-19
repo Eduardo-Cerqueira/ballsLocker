@@ -66,7 +66,7 @@ public class EncryptionTool {
                 writeToFile(encryptedMessage);  
                 System.out.println("The message has been saved to file " + FILENAME);  
 
-                if (message.toLowerCase().contains("hermanos")) { // Vérifie si "hermanos" est dans le message, peu importe la casse  
+                if (message.toLowerCase().contains("hermanos")) { // Vérify if message contain "hermanos"
                 String easterEggMessage = "🍗🍗🍗 Bienvenue chez Los Pollos Hermanos ! 🍗🍗🍗" +  
                         "\n    _.-'`-._" +  
                         "\n   .'         '-." +  
@@ -77,7 +77,7 @@ public class EncryptionTool {
                         "\n   '-._      _.-'" +  
                         "\n       `''''`";  
                 
-                System.out.println(easterEggMessage); // Affiche le message de l'easter egg  
+                System.out.println(easterEggMessage);
               } 
             
             }  
