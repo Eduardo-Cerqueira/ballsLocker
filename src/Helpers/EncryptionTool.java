@@ -62,7 +62,7 @@ public class EncryptionTool {
             // Asks the user if they want to save the encrypted message  
             System.out.println("Do you want to save the encrypted message ? (Y/N)");  
             String saveChoice = reader.readLine();  
-            if (saveChoice.equalsIgnoreCase("O")) {  
+            if (saveChoice.equalsIgnoreCase("Y")) {  
                 writeToFile(encryptedMessage);  
                 System.out.println("The message has been saved to file " + FILENAME);  
             }  
@@ -70,7 +70,7 @@ public class EncryptionTool {
             // Asks the user if they want to decrypt the message  
             System.out.println("Do you want to decrypt the message ? (Y/N)");  
             String decryptChoice = reader.readLine();  
-            if (decryptChoice.equalsIgnoreCase("O")) {  
+            if (decryptChoice.equalsIgnoreCase("Y")) {  
                 String decryptedMessage = "";  
                 switch (choice) {  
                     case 1:  
@@ -289,7 +289,7 @@ private static String decryptLFSR(String encryptedMessage, String key) {
 }  
 
 private static char getNextLFSRBit(String lfsr) {  
-    // Simule un LFSR à 4 bits pour simplifier  
+    // Simulates a 4-bit LFSR for simplicity  
     char lfsrChar = lfsr.charAt(0);  
     char newBit = (char) ((lfsr.charAt(0) - '0') ^ (lfsr.charAt(3) - '0') + '0'); // XOR des bits 0 et 3  
     return newBit;  
