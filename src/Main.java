@@ -1,5 +1,6 @@
 import Menu.DynamicMenu;
 import Menu.Menus;
+import Struct.Action;
 
 public class Main {
     public static void main(String[] args) {
@@ -8,51 +9,14 @@ public class Main {
         System.out.println("Menu entry " + menuEntry + " has been choosen !");
 
         while (true) {
-            switch (menuEntry) {
-                case 1:
-                    Menus.displayROTEncryptionMenu();
-                    break;
-                case 2:
-                    Menus.displayROTDecryptionMenu();
-                    break;
-                case 3:
-                    Menus.displayMD5HashMenu();
-                    break;
-                case 4:
-                    Menus.displaySHA256HashMenu();
-                    break;
-                case 5:
-                    Menus.displayMD5CompareHashMenu();
-                    break;
-                case 6:
-                    Menus.displaySHA256CompareHashMenu();
-                    break;
-                case 7:
-                    Menus.displayPolybeEncryptionMenu();
-                    break;
-                case 8:
-                    Menus.displayPolybeDecryptionMenu();
-                    break;
-                case 9:
-                    Menus.displayCipherBuilderEncryptionMenu();
-                    break;
-                case 10:
-                    Menus.displayCipherBuilderDecryptionMenu();
-                    break;
-                case 11:
-                    Menus.displayGenerateRandomNumber();
-                    break;
-                case 12:
-                    Menus.displayVigenereEncryptionMenu();
-                    break;
-                case 13:
-                    Menus.displayVigenereDecryptionMenu();
-                    break;
-                default:
-                    if (menuEntry == exitKey) {
-                        System.exit(0);
-                    }
-                    break;
+            for (int i = 0; i < Menus.HomeMenu.size(); i++) {
+                if (menuEntry == i + 1) {
+                    Action action = Menus.HomeMenu.get(i).executeAction();
+                    action.executeAction();
+
+                } else if (menuEntry == exitKey) {
+                    System.exit(0);
+                }
             }
 
             menuEntry = DynamicMenu.generateMenu(Menus.HomeMenu, "\nWhere do you want to go ?", exitKey, 0);
