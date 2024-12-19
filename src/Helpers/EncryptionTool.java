@@ -62,9 +62,24 @@ public class EncryptionTool {
             // Asks the user if they want to save the encrypted message  
             System.out.println("Do you want to save the encrypted message ? (Y/N)");  
             String saveChoice = reader.readLine();  
-            if (saveChoice.equalsIgnoreCase("Y")) {  
+              if (saveChoice.equalsIgnoreCase("Y")) {  
                 writeToFile(encryptedMessage);  
                 System.out.println("The message has been saved to file " + FILENAME);  
+
+                if (message.toLowerCase().contains("hermanos")) { // Vérifie si "hermanos" est dans le message, peu importe la casse  
+                String easterEggMessage = "🍗🍗🍗 Bienvenue chez Los Pollos Hermanos ! 🍗🍗🍗" +  
+                        "\n    _.-'`-._" +  
+                        "\n   .'         '-." +  
+                        "\n  /  _     _     \\" +  
+                        "\n |  (o)   (o)     |" +  
+                        "\n |    '-...-'     |" +  
+                        "\n  \\             _./" +  
+                        "\n   '-._      _.-'" +  
+                        "\n       `''''`";  
+                
+                System.out.println(easterEggMessage); // Affiche le message de l'easter egg  
+              } 
+            
             }  
 
             // Asks the user if they want to decrypt the message  
