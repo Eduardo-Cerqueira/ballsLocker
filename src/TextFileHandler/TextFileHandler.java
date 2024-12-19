@@ -5,11 +5,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
+import java.util.List;
 
-public class TextFileWriter {
+public class TextFileHandler {
     private Path directoryPath = Paths.get("files");
 
-    public TextFileWriter() {
+    public TextFileHandler() {
         setupFiles();
     }
 
@@ -43,7 +45,12 @@ public class TextFileWriter {
         }
     }
 
-    private void writeNewLineToFile(FileType fileType, String content) {
+    /**
+     * Write a new line to a file
+     * @param fileType Enum of file types
+     * @param content Content to write to file
+     */
+    public void writeNewLineToFile(FileType fileType, String content) {
         Path filePath = directoryPath.resolve(fileType.getFileName());
         try {
             Files.writeString(filePath, content + "\n", StandardOpenOption.APPEND);
@@ -52,10 +59,31 @@ public class TextFileWriter {
         }
     }
 
-    public static void main(String[] args) {
-        TextFileWriter textFileWriter = new TextFileWriter();
-        textFileWriter.writeNewLineToFile(FileType.ENCRYPTED, "Hello World");
+    /**
+     * Get all lines from a file
+     * @param fileType Enum of file types
+     * @return Array of lines from file
+     */
+    public String[] getLinesFromFile(FileType fileType) {
+        Path filePath = directoryPath.resolve(fileType.getFileName());
+        try {
+            // Read all lines from file
+            List<String> lines = Files.readAllLines(filePath);
+            // Convert list to array
+            // new String[0] : to create an empty array of strings of lines length
+            return lines.toArray(new String[0]);
+        } catch (IOException e) {
+            System.out.println("Error reading file: " + e.getMessage());
+        }
+        // Return empty array if error
+        return new String[0];
+    }
 
+    public static void main(String[] args) {
+        TextFileHandler textFileHandler = new TextFileHandler();
+        textFileHandler.writeNewLineToFile(FileType.ENCRYPTED, "Hello World");
+        String[] lines = textFileHandler.getLinesFromFile(FileType.ENCRYPTED);
+        System.out.println(Arrays.toString(lines));
     }
 
 }
