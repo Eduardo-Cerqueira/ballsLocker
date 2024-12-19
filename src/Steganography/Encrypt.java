@@ -34,9 +34,10 @@ public class Encrypt {
             Pixel[] pixels = extractPixels(imageToEncrypt);
             // Convert the message to a binary array
             String[] messageInBinary = convertMessageToBinaryArray(message);
+            // Encode the message in the pixels
             encodeMessageBinaryInPixels(pixels, messageInBinary);
-            ReplacePixelsInNewBufferedImage(pixels, image);
-            SaveNewFile(image, newImageFile);
+            replacePixelsInNewBufferedImage(pixels, image);
+            saveNewFile(image, newImageFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -117,60 +118,101 @@ public class Encrypt {
                 isLastCharacter = true;
             }
             // Call method to change the color of the 3 pixels based on the binary character
-            ChangePixelsColor(messageBinary[i], currentPixels, isLastCharacter);
+            changePixelsColor(messageBinary[i], currentPixels, isLastCharacter);
             // Update the index to point to the next triplet of pixels
             pixelIndex = pixelIndex + 3;
         }
     }
 
-    private static void ChangePixelsColor(String messageBinary, Pixel[] pixels, boolean isLastCharacter) {
+    /**
+     * Change the color of the pixels based on the binary character.
+     * @param messageBinary The binary representation of the character.
+     * @param pixels The pixels of the image.
+     * @param isLastCharacter A boolean indicating if this is the last character of the message.
+     */
+    private static void changePixelsColor(String messageBinary, Pixel[] pixels, boolean isLastCharacter) {
         int messageBinaryIndex = 0;
         for(int i =0; i < pixels.length-1; i++) {
             char[] messageBinaryChars = new char[] {messageBinary.charAt(messageBinaryIndex), messageBinary.charAt(messageBinaryIndex+1), messageBinary.charAt(messageBinaryIndex+2)};
-            String[] pixelRGBBinary = GetPixelsRGBBinary(pixels[i], messageBinaryChars);
-            pixels[i].setColor(GetNewPixelColor(pixelRGBBinary));
+            String[] pixelRGBBinary = modifyPixelRGBBinary(pixels[i], messageBinaryChars);
+            pixels[i].setColor(convertBinaryToColor(pixelRGBBinary));
             messageBinaryIndex = messageBinaryIndex + 3;
         }
-        if(!isLastCharacter) {
-            char[] messageBinaryChars = new char[] {messageBinary.charAt(messageBinaryIndex), messageBinary.charAt(messageBinaryIndex+1), '1'};
-            String[] pixelRGBBinary = GetPixelsRGBBinary(pixels[pixels.length-1], messageBinaryChars);
-            pixels[pixels.length-1].setColor(GetNewPixelColor(pixelRGBBinary));
-        }else {
-            char[] messageBinaryChars = new char[] {messageBinary.charAt(messageBinaryIndex), messageBinary.charAt(messageBinaryIndex+1), '0'};
-            String[] pixelRGBBinary = GetPixelsRGBBinary(pixels[pixels.length-1], messageBinaryChars);
-            pixels[pixels.length-1].setColor(GetNewPixelColor(pixelRGBBinary));
-        }
+        char lastBit = isLastCharacter ? '0' : '1';
+        char[] messageBinaryChars = new char[] {messageBinary.charAt(messageBinaryIndex), messageBinary.charAt(messageBinaryIndex + 1), lastBit};
+        String[] pixelRGBBinary = modifyPixelRGBBinary(pixels[pixels.length - 1], messageBinaryChars);
+        pixels[pixels.length - 1].setColor(convertBinaryToColor(pixelRGBBinary));
     }
 
-    private static String[] GetPixelsRGBBinary(Pixel pixel, char[] messageBinaryChars) {
+    /**
+     * Modify the least significant bit of red, green and blue components of a pixel's color.
+     * @param pixel The pixel to modify.
+     * @param messageBinaryChars The binary representation of the message character.
+     * @return An array of strings, each representing the modified binary string of the red, green,
+     * and blue components of the pixel's color.
+     */
+    private static String[] modifyPixelRGBBinary(Pixel pixel, char[] messageBinaryChars) {
         return new String[] {
-            ChangePixelBinary(Integer.toBinaryString(pixel.getColor().getRed()), messageBinaryChars[0]),
-            ChangePixelBinary(Integer.toBinaryString(pixel.getColor().getGreen()), messageBinaryChars[1]),
-            ChangePixelBinary(Integer.toBinaryString(pixel.getColor().getBlue()), messageBinaryChars[2])
+            // Modify the least significant bit of the red component
+            modifyPixelLSB(Integer.toBinaryString(pixel.getColor().getRed()), messageBinaryChars[0]),
+            // Modify the least significant bit of the green component
+            modifyPixelLSB(Integer.toBinaryString(pixel.getColor().getGreen()), messageBinaryChars[1]),
+            // Modify the least significant bit of the blue component
+            modifyPixelLSB(Integer.toBinaryString(pixel.getColor().getBlue()), messageBinaryChars[2])
         };
     }
 
-    private static String ChangePixelBinary(String pixelBinary, char messageBinaryChar) {
+    /**
+     * Modify the least significant bit of ONE binary representing a color component.
+     * @param pixelBinary The binary representation of the pixel color component.
+     * @param messageBinaryChar The character of the message to encode.
+     * @return A new binary string where the last bit has been replaced with the provided binary character.
+     */
+    private static String modifyPixelLSB(String pixelBinary, char messageBinaryChar) {
         StringBuilder sb = new StringBuilder(pixelBinary);
+        // Replace the last bit of the pixel with the message bit
         sb.setCharAt(pixelBinary.length()-1, messageBinaryChar);
         return sb.toString();
     }
 
-    private static Color GetNewPixelColor(String[] colorBinary) {
-        return new Color(Integer.parseInt(colorBinary[0], 2), Integer.parseInt(colorBinary[1], 2), Integer.parseInt(colorBinary[2], 2));
+    /**
+     * Convert the binary representation of the color components to a Color object.
+     * @param colorBinary The binary representation of the color components.
+     * @return The Color object.
+     */
+    private static Color convertBinaryToColor(String[] colorBinary) {
+        // Convert the binary string for the red component into an integer
+        int red = Integer.parseInt(colorBinary[0], 2);
+        // Convert the binary string for the green component into an integer
+        int green = Integer.parseInt(colorBinary[1], 2);
+        // Convert the binary string for the blue component into an integer
+        int blue = Integer.parseInt(colorBinary[2], 2);
+        // Return a Color object containing the decimal values of the red, green, and blue components.
+        return new Color(red, green, blue);
     }
 
-    private static void ReplacePixelsInNewBufferedImage(Pixel[] newPixels, BufferedImage newImage) {
+    /**
+     * Replace the pixels in a new BufferedImage.
+     * @param newPixels The new pixels to replace.
+     * @param newImage The new image.
+     */
+    private static void replacePixelsInNewBufferedImage(Pixel[] newPixels, BufferedImage newImage) {
         for(int i = 0; i < newPixels.length; i++) {
+            // Set the color of the pixel at the specified coordinates
             newImage.setRGB(newPixels[i].getX(), newPixels[i].getY(), newPixels[i].getColor().getRGB());
         }
     };
 
-    private static void SaveNewFile(BufferedImage newImage, File newImageFile) {
+    /**
+     * Save the new image to a file.
+     * @param newImage The new image.
+     * @param newImageFile The new image file.
+     */
+    private static void saveNewFile(BufferedImage newImage, File newImageFile) {
         try {
+            // Write the new image to a file
             ImageIO.write(newImage, "png", newImageFile);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
