@@ -7,6 +7,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class DynamicMenu {
+    /**
+     * This function prints a menu list to the console and execute action for a select entry
+     * @param menu Each menu entry that can be chosen
+     * @param previousMenu Menu to return on exitKey
+     */
     public static void displaySubMenu(List<MenuItem> menu, List<MenuItem> previousMenu) {
         int exitKey = menu.size() + 1;
         int menuEntry = DynamicMenu.generateMenu(menu, "\nWhere do you want to go ?", exitKey, 0);
