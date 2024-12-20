@@ -24,6 +24,9 @@ public class Main {
                 case 2:
                     Menus.displayToDecryptPasswordMenu();
                     break;
+                case 3:
+                    Menus.displayGenerateRandomNumber();
+                    break;
             }
 
             if (menuEntry == exitKey) {
