@@ -6,7 +6,8 @@ public enum CipherAlgorithm {
     VIGENERE("Vigenere"),
     RC4("RC4"),
     AES("AES"),
-    ENIGMA("Enigma");
+    ENIGMA("Enigma"),
+    CHAIN("Chain");
 
     private final String algorithmName;
 
