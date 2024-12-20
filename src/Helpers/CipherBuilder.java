@@ -7,7 +7,7 @@ public class CipherBuilder {
     static ROT rot = new ROT();
     static Polybe polybe = new Polybe(Polybe.SquareMethode.HORIZONTAL);
 
-    private String usedAlgorithms;
+    private String usedAlgorithms = "";
     private String encryptedMessage;
 
     public String getUsedAlgorithms() {
