@@ -1,5 +1,8 @@
 package TextFileHandler;
 
+import Cipher.ROT;
+import Hash.SHA256;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,6 +42,16 @@ public class TextFileHandler {
         if(!Files.exists(filePath)){
             try {
                 Files.createFile(filePath);
+                if(fileType == FileType.ENCRYPTED) {
+                    String encrypt = ROT.encrypt("Hello World", 3, true);
+                    writeNewLineToFile(new FileLine(FileType.ENCRYPTED, "Hello World", encrypt));
+                }
+                else if(fileType == FileType.HASHED) {
+                    String encrypt = ROT.encrypt("Hello World", 3, true);
+                    String hash = SHA256.hash(encrypt);
+                    writeNewLineToFile(new FileLine(FileType.HASHED, encrypt, hash));
+                }
+
             } catch (IOException e) {
                 System.out.println("Error creating file: " + e.getMessage());
             }
