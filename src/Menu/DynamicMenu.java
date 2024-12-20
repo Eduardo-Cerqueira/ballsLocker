@@ -17,7 +17,7 @@ public class DynamicMenu {
                 if (menuEntry == i + 1) {
                     Action action = menu.get(i).executeAction();
                     action.executeAction();
-
+                    return;
                 } else if (menuEntry == exitKey) {
                     if (menu == Menus.HomeMenu) {
                         System.exit(0);
@@ -26,8 +26,6 @@ public class DynamicMenu {
                     }
                 }
             }
-
-            menuEntry = DynamicMenu.generateMenu(previousMenu, "\nWhere do you want to go ?", exitKey, 0);
         }
     }
 

@@ -8,6 +8,9 @@ import Hash.SHA256;
 import Helpers.CipherBuilder;
 import Struct.Action;
 import Struct.MenuItem;
+import TextFileHandler.TextFileHandler;
+import TextFileHandler.FileLine;
+import TextFileHandler.FileType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -67,6 +70,7 @@ public class Menus {
 
         String encryptedWord = ROT.encrypt(word, parsedInt, false);
         System.out.println("Encrypted word is: ".concat(encryptedWord));
+        saveEncryptedPassword(encryptedWord, "ROT".concat(";").concat(String.valueOf(parsedInt)));
     }
 
     public static void displayROTDecryptionMenu() {
@@ -138,7 +142,9 @@ public class Menus {
             }
         }
 
-        System.out.println(cipherBuilder.getEncryptedMessage());
+        String encrypted = cipherBuilder.getEncryptedMessage();
+        System.out.println(encrypted);
+        saveEncryptedPassword(encrypted, cipherBuilder.getUsedAlgorithms());
     }
 
     public static void displayCipherBuilderDecryptionMenu() {
@@ -169,6 +175,17 @@ public class Menus {
         System.out.println(cipherBuilder.getEncryptedMessage());
     }
 
+    public static void saveEncryptedPassword(String encrypted, String algorithm) {
+        TextFileHandler textFileHandler = new TextFileHandler();
+        FileLine line = new FileLine(FileType.ENCRYPTED, encrypted, algorithm);
+        textFileHandler.writeNewLineToFile(line);
+
+        String hash = SHA256.hash(encrypted);
+
+        line = new FileLine(FileType.HASHED, hash, "SHA256");
+        textFileHandler.writeNewLineToFile(line);
+    }
+
     public static void displayGenerateRandomNumber() {
         String seed = inputString("Seed:", "Seed is invalid !");
         int range = inputInteger("Range:", "Range is invalid !");
@@ -178,7 +195,9 @@ public class Menus {
     public static void displayVigenereEncryptionMenu() {
         String word = inputString("Word to encrypt:", "Word is invalid !");
         String key = inputString("Key:", "Key is invalid !");
-        System.out.println(Vigenere.encrypt(word, key));
+        String encrypted = Vigenere.encrypt(word, key);
+        System.out.println(encrypted);
+        saveEncryptedPassword(encrypted, "Vigenere");
     }
 
     public static void displayVigenereDecryptionMenu() {
