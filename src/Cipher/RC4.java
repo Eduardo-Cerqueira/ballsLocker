@@ -1,3 +1,5 @@
+package Cipher;
+
 public class RC4 {
     public static byte[] encrypt(byte[] stringBytesToEncrypt, byte[] encryptionKeyBytes) {
         //Prevent the user from entering a key too small. 
@@ -59,4 +61,5 @@ public class RC4 {
         //RC4 decryption process is the same as encryption process, so this is just for more intuitive use.
         return encrypt(stringBytesToDecrypt, decryptionKeyBytes);
     }
+
 }

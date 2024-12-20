@@ -1,8 +1,6 @@
 package Menu;
 
-import Cipher.Polybe;
-import Cipher.ROT;
-import Cipher.Vigenere;
+import Cipher.*;
 import Hash.MD5;
 import Hash.SHA256;
 import Helpers.CipherBuilder;
@@ -31,19 +29,24 @@ public class Menus {
     );
 
     public static final List<MenuItem> EncryptMenu = Arrays.asList(
-            new MenuItem("ROT", "Encrypter le mot de passe avec ROT, vous devrez saisir le nombre de rotation entre votre charactere et le charactere chiffré", new Action() {
+            new MenuItem("ROT", "Chiffrer le mot de passe avec ROT, vous devrez saisir le nombre de rotation entre votre charactere et le charactere chiffré", new Action() {
                 public void executeAction() {
                     displayROTEncryptionMenu();
                 }
             }),
-            new MenuItem("Polybe", "Encrypter le mot de passe avec Polybe", new Action() {
+            new MenuItem("Polybe", "Chiffrer le mot de passe avec Polybe", new Action() {
                 public void executeAction() {
                     displayPolybeEncryptionMenu();
                 }
             }),
-            new MenuItem("Vigenere", "Encrypter le mot de passe avec Vigenere, vous devrez saisir une clé et le message à chiffrer", new Action() {
+            new MenuItem("Vigenere", "Chiffrer le mot de passe avec Vigenere, vous devrez saisir une clé et le message à chiffrer", new Action() {
                 public void executeAction() {
                     displayVigenereEncryptionMenu();
+                }
+            }),
+            new MenuItem("RC4", "Chiffrer le mot de passe avec RC4, vous devrez saisir une clé et le message à chiffrer", new Action() {
+                public void executeAction() {
+                    displayRC4EncryptionMenu();
                 }
             })
     );
@@ -112,7 +115,32 @@ public class Menus {
 
         String encryptedWord = ROT.encrypt(word, parsedInt, false);
         System.out.println("Encrypted word is: ".concat(encryptedWord));
-        saveEncryptedPassword(encryptedWord, "ROT".concat(";").concat(String.valueOf(parsedInt)));
+        saveEncryptedPassword(encryptedWord, CipherAlgorithm.ROT.getAlgorithmName());
+    }
+
+    public static void displayPolybeEncryptionMenu() {
+        Polybe polybe = new Polybe(Polybe.SquareMethode.HORIZONTAL);
+
+        String word = inputString("Word to encrypt:", "Word is invalid !");
+        String encrypted = polybe.encrypt(word);
+        System.out.println(encrypted);
+        saveEncryptedPassword(encrypted, CipherAlgorithm.POLYBE.getAlgorithmName());
+    }
+
+    public static void displayVigenereEncryptionMenu() {
+        String word = inputString("Word to encrypt:", "Word is invalid !");
+        String key = inputString("Key:", "Key is invalid !");
+        String encrypted = Vigenere.encrypt(word, key);
+        System.out.println(encrypted);
+        saveEncryptedPassword(encrypted, CipherAlgorithm.VIGENERE.getAlgorithmName());
+    }
+
+    public static void displayRC4EncryptionMenu() {
+        String word = inputString("Word to encrypt:", "Word is invalid !");
+        String key = inputString("Key:", "Key is invalid !");
+        String encrypted = Arrays.toString(RC4.encrypt(word.getBytes(), key.getBytes()));
+        System.out.println(encrypted);
+        saveEncryptedPassword(encrypted, CipherAlgorithm.RC4.getAlgorithmName());
     }
 
     public static void displayROTDecryptionMenu() {
@@ -145,12 +173,6 @@ public class Menus {
         System.out.println(SHA256.compare(word, hash));
     }
 
-    public static void displayPolybeEncryptionMenu() {
-        Polybe polybe = new Polybe(Polybe.SquareMethode.HORIZONTAL);
-
-        String word = inputString("Word to encrypt:", "Word is invalid !");
-        System.out.println(polybe.encrypt(word));
-    }
 
     public static void displayPolybeDecryptionMenu() {
         Polybe polybe = new Polybe(Polybe.SquareMethode.HORIZONTAL);
@@ -223,14 +245,6 @@ public class Menus {
         System.out.println(new Cipher.LFSR(seed).generate(range));
     }
 
-    public static void displayVigenereEncryptionMenu() {
-        String word = inputString("Word to encrypt:", "Word is invalid !");
-        String key = inputString("Key:", "Key is invalid !");
-        String encrypted = Vigenere.encrypt(word, key);
-        System.out.println(encrypted);
-        saveEncryptedPassword(encrypted, "Vigenere");
-    }
-
     public static void displayVigenereDecryptionMenu() {
         String word = inputString("Word to decrypt:", "Word is invalid !");
         String key = inputString("Key:", "Key is invalid !");
@@ -294,16 +308,23 @@ public class Menus {
                     String algorithm = password.getAlgorithm();
 
                     // check which algorith is choosen
-                    if (algorithm.equals("ROT")) {
+                    if (algorithm.equals(CipherAlgorithm.ROT.getAlgorithmName())) {
                         int parsedInt = inputInteger("Number of rotate:", "Number is invalid !");
                         String decryptedPassword = ROT.decrypt(password.getContent(), parsedInt);
                         System.out.print(decryptedPassword.concat("\n"));
-                    } else if (algorithm.equals("Polybe")) {
+                    } else if (algorithm.equals(CipherAlgorithm.POLYBE.getAlgorithmName())) {
                         Polybe polybe = new Polybe(Polybe.SquareMethode.HORIZONTAL);
                         System.out.println(polybe.decrypt(password.getContent()));
-                    } else if (algorithm.equals("Vigenere")) {
+                    } else if (algorithm.equals(CipherAlgorithm.VIGENERE.getAlgorithmName())) {
                         String key = inputString("Key:", "Key is invalid !");
-                        System.out.println(Vigenere.encrypt(password.getContent(), key));
+                        System.out.println(Vigenere.decrypt(password.getContent(), key));
+                    } else if (algorithm.equals(CipherAlgorithm.RC4.getAlgorithmName())) {
+                        String key = inputString("Key:", "Key is invalid !");
+                        System.out.println(Arrays.toString(RC4.encrypt(password.getContent().getBytes(), key.getBytes())));
+                    } else if (algorithm.equals(CipherAlgorithm.ENIGMA.getAlgorithmName())) {
+                        System.out.println("Algorithm not implemented yet");
+                    } else if (algorithm.equals(CipherAlgorithm.CHAIN.getAlgorithmName())) {
+                        System.out.println("Algorithm not implemented yet");
                     }
                 }
             }
