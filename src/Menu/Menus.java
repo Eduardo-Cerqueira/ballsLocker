@@ -14,27 +14,56 @@ import TextFileHandler.FileType;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 import static Helpers.Validation.inputInteger;
 import static Helpers.Validation.inputString;
 
 public class Menus {
     public static final List<MenuItem> HomeMenu = Arrays.asList(
-            new MenuItem("Chiffrer un mot de passe", "Vous pouvez chiffrer un mot de passe avec l'algorithme de votre choix, vous devrez le choisir parmi un liste d'algorithmes et ce mot de passe sera stocké de manière sécurisée dans votre ordinateur", new Action() { public void executeAction() { }}),
-            new MenuItem("Déchiffrer un mot de passe", "Vous pouvez déchiffrer un mot de passe que vous avez chiffré précedement, vous devrez le choisir parmi un liste d'algorithmes et ce mot de passe sera stocké de manière sécurisée dans votre ordinateur", new Action() { public void executeAction() { }})
+            new MenuItem("Chiffrer un mot de passe", "Vous pouvez chiffrer un mot de passe avec l'algorithme de votre choix, vous devrez le choisir parmi un liste d'algorithmes et ce mot de passe sera stocké de manière sécurisée dans votre ordinateur", new Action() {
+                public void executeAction() {
+                }
+            }),
+            new MenuItem("Déchiffrer un mot de passe", "Vous pouvez déchiffrer un mot de passe que vous avez chiffré précedement, vous devrez le choisir parmi un liste d'algorithmes et ce mot de passe sera stocké de manière sécurisée dans votre ordinateur", new Action() {
+                public void executeAction() {
+                }
+            })
     );
 
     public static final List<MenuItem> EncryptMenu = Arrays.asList(
-            new MenuItem("ROT", "Encrypter le mot de passe avec ROT, vous devrez saisir le nombre de rotation entre votre charactere et le charactere chiffré", new Action() { public void executeAction() { displayROTEncryptionMenu(); }}),
-            new MenuItem("Polybe", "Encrypter le mot de passe avec Polybe", new Action() { public void executeAction() { displayPolybeEncryptionMenu(); }}),
-            new MenuItem("Vigenere", "Encrypter le mot de passe avec Vigenere, vous devrez saisir une clé et le message à chiffrer", new Action() { public void executeAction() { displayVigenereEncryptionMenu(); }})
+            new MenuItem("ROT", "Encrypter le mot de passe avec ROT, vous devrez saisir le nombre de rotation entre votre charactere et le charactere chiffré", new Action() {
+                public void executeAction() {
+                    displayROTEncryptionMenu();
+                }
+            }),
+            new MenuItem("Polybe", "Encrypter le mot de passe avec Polybe", new Action() {
+                public void executeAction() {
+                    displayPolybeEncryptionMenu();
+                }
+            }),
+            new MenuItem("Vigenere", "Encrypter le mot de passe avec Vigenere, vous devrez saisir une clé et le message à chiffrer", new Action() {
+                public void executeAction() {
+                    displayVigenereEncryptionMenu();
+                }
+            })
     );
 
     public static final List<MenuItem> DecryptMenu = Arrays.asList(
-            new MenuItem("ROT", "Decrypter le mot de passe avec ROT, vous devrez saisir le nombre de rotation entre votre charactere chiffré et le charactere", new Action() { public void executeAction() { displayROTEncryptionMenu(); }}),
-            new MenuItem("Polybe", "Decrypter le mot de passe avec Polybe", new Action() { public void executeAction() { displayPolybeEncryptionMenu(); }}),
-            new MenuItem("Vigenere", "Decrypter le mot de passe avec Vigenere, vous devrez saisir une clé pour déchiffrer", new Action() { public void executeAction() { displayVigenereEncryptionMenu(); }})
+            new MenuItem("ROT", "Decrypter le mot de passe avec ROT, vous devrez saisir le nombre de rotation entre votre charactere chiffré et le charactere", new Action() {
+                public void executeAction() {
+                    displayROTEncryptionMenu();
+                }
+            }),
+            new MenuItem("Polybe", "Decrypter le mot de passe avec Polybe", new Action() {
+                public void executeAction() {
+                    displayPolybeEncryptionMenu();
+                }
+            }),
+            new MenuItem("Vigenere", "Decrypter le mot de passe avec Vigenere, vous devrez saisir une clé pour déchiffrer", new Action() {
+                public void executeAction() {
+                    displayVigenereEncryptionMenu();
+                }
+            })
     );
 
     /*
@@ -56,13 +85,25 @@ public class Menus {
     */
 
     public static final List<MenuItem> EncryptionChainMenu = Arrays.asList(
-            new MenuItem("Ajouter du Rot encrypt", "Ajouter un chiffrement sur le message actuel (encrypté ou non) avec l'algorithme de substitution ROT, vous devrez saisir le nombre de rotation entre votre lettre et la lettre chiffrée", new Action() { public void executeAction() {}}),
-            new MenuItem("Ajouter du Polybe encrypt", "Ajouter un chiffrement sur le message actuel (encrypté ou non) avec l'algorithme de Polybe", new Action() { public void executeAction() {}})
+            new MenuItem("Ajouter du Rot encrypt", "Ajouter un chiffrement sur le message actuel (encrypté ou non) avec l'algorithme de substitution ROT, vous devrez saisir le nombre de rotation entre votre lettre et la lettre chiffrée", new Action() {
+                public void executeAction() {
+                }
+            }),
+            new MenuItem("Ajouter du Polybe encrypt", "Ajouter un chiffrement sur le message actuel (encrypté ou non) avec l'algorithme de Polybe", new Action() {
+                public void executeAction() {
+                }
+            })
     );
 
     public static final List<MenuItem> DecryptionChainMenu = Arrays.asList(
-            new MenuItem("Ajouter du Rot decrypt", "Déchiffrer le message actuel (encrypté ou non) avec l'algorithme de substitution ROT, vous devrez saisir le nombre de rotation entre votre lettre chiffrée et la lettre non chiffrée", new Action() { public void executeAction() {}}),
-            new MenuItem("Ajouter du Polybe decrypt", "Déchiffrer le message actuel (encrypté ou non) avec l'algorithme de Polybe", new Action() { public void executeAction() {}})
+            new MenuItem("Ajouter du Rot decrypt", "Déchiffrer le message actuel (encrypté ou non) avec l'algorithme de substitution ROT, vous devrez saisir le nombre de rotation entre votre lettre chiffrée et la lettre non chiffrée", new Action() {
+                public void executeAction() {
+                }
+            }),
+            new MenuItem("Ajouter du Polybe decrypt", "Déchiffrer le message actuel (encrypté ou non) avec l'algorithme de Polybe", new Action() {
+                public void executeAction() {
+                }
+            })
     );
 
     public static void displayROTEncryptionMenu() {
@@ -245,27 +286,27 @@ public class Menus {
             System.out.println(string);
         }
 
-        while (true) {
             int choice = inputInteger("Which password do you want to decrypt ?", "Input is invalid");
+            for (int i = 0; i < lines.size(); i++) {
+                if (choice == i + 1) {
+                    FileLine password = lines.get(i);
 
-                for (int i = 0; i < lines.size(); i++) {
-                    if (choice == i + 1) {    
-                        FileLine password = lines.get(choice);
-            
-                        switch(password.getAlgorithm()) {
-                            case "ROT":
-                                int parsedInt = inputInteger("Number of rotate:", "Number is invalid !");
-                                String decryptedPassword = ROT.decrypt(password.getContent(), parsedInt);
-                                System.out.print(decryptedPassword);
-                                break;
-                            case "":
-                                break;
-                        }
-    
-    
+                    String algorithm = password.getAlgorithm();
+
+                    // check which algorith is choosen
+                    if (algorithm.equals("ROT")) {
+                        int parsedInt = inputInteger("Number of rotate:", "Number is invalid !");
+                        String decryptedPassword = ROT.decrypt(password.getContent(), parsedInt);
+                        System.out.print(decryptedPassword.concat("\n"));
+                    } else if (algorithm.equals("Polybe")) {
+                        Polybe polybe = new Polybe(Polybe.SquareMethode.HORIZONTAL);
+                        System.out.println(polybe.decrypt(password.getContent()));
+                    } else if (algorithm.equals("Vigenere")) {
+                        String key = inputString("Key:", "Key is invalid !");
+                        System.out.println(Vigenere.encrypt(password.getContent(), key));
                     }
                 }
-        }
+            }
         //System.out.println(Arrays.toString(lines));
     }
 }
