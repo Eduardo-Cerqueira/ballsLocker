@@ -7,28 +7,54 @@ import java.util.Scanner;
 
 public class DynamicMenu {
     /**
-     * This function prints a menu list to the console and returns the input using the interactWithKey/interactWithMenu function
-     * @param menuBuilder A menu building containing all information about menu
+     * This function prints a menu list to the console and returns the menu input;
+     * @param menu Each menu entry that can be chosen
+     * @param question Question to ask when requesting user input
+     * @param exitKey Key to press to exit the program
+     * @param helpKey Key to press to get help
      * @return User input as integer
      */
-    public static int generateMenu(MenuBuilder menuBuilder) {
-        for (int i = 0; i < menuBuilder.getMenu().size(); i++) {
+    public static int generateMenu(List<MenuItem> menu, String question, int exitKey, int helpKey) {
+        displayMenu(menu, false);
+
+        String leaveString = "You can leave using '".concat(Integer.toString(exitKey)).concat("'");
+        String helpString = "\nYou can get help using '".concat(Integer.toString(helpKey)).concat("'");
+
+        System.out.println(helpString);
+        System.out.println(leaveString);
+
+        int key = interactWithMenu(menu, question, exitKey, helpKey);
+
+        while (key == helpKey) {
+            displayMenu(menu, true);
+            System.out.println("\nYou can hide the help menu using '".concat(Integer.toString(helpKey)).concat("'"));
+            System.out.println(leaveString);
+            key = interactWithMenu(menu, question, exitKey, helpKey);
+
+            if (key == helpKey) {
+                displayMenu(menu, false);
+                System.out.println(helpString);
+                System.out.println(leaveString);
+                key = interactWithMenu(menu, question, exitKey, helpKey);
+            }
+        }
+
+        return key;
+    }
+
+    /**
+     * This function prints a menu list to the console
+     * @param menu Each menu entry that can be chosen
+     * @param helpMode Which menu to display
+     */
+    private static void displayMenu(List<MenuItem> menu, boolean helpMode) {
+        for (int i = 0; i < menu.size(); i++) {
             String string = (i + 1) +
                     ". " +
-                    (menuBuilder.isOnHelpMode() ? menuBuilder.getMenu().get(i).choice().concat(" => ").concat(menuBuilder.getMenu().get(i).helper()) : menuBuilder.getMenu().get(i).choice());
+                    (helpMode ? menu.get(i).choice().concat(" => ").concat(menu.get(i).helper()) : menu.get(i).choice());
 
             System.out.println(string);
         }
-
-        if (menuBuilder.isOnHelpMode()) {
-            System.out.println("\nYou can request help using '".concat(Integer.toString(menuBuilder.getHelpKey())).concat("'"));
-        } else {
-            System.out.println("\nYou can leave using '".concat(Integer.toString(menuBuilder.getQuitKey())).concat("'"));
-        }
-
-        return menuBuilder.isOnHelpMode()
-                ? DynamicMenu.interactWithKey(menuBuilder.getQuestion(), menuBuilder.getQuitKey(), !menuBuilder.isOnHelpMode())
-                : DynamicMenu.interactWithMenu(menuBuilder.getMenu(), menuBuilder.getQuestion(), menuBuilder.getQuitKey(), menuBuilder.getHelpKey());
     }
 
     /**
@@ -37,14 +63,14 @@ public class DynamicMenu {
      * @param question Question to ask when requesting user input
      * @return  User input as integer
      */
-    public static int interactWithMenu(List<MenuItem> menu, String question, int quitKey, int helpKey) {
+    public static int interactWithMenu(List<MenuItem> menu, String question, int exitKey, int helpKey) {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
             System.out.println(question);
             String choice = scanner.nextLine();
 
-            if (choice.equals(String.valueOf(quitKey)) || choice.equals(String.valueOf(helpKey))) {
+            if (choice.equals(String.valueOf(exitKey)) || choice.equals(String.valueOf(helpKey))) {
                 return Integer.parseInt(choice);
             }
 
@@ -52,26 +78,6 @@ public class DynamicMenu {
                 if (choice.equals(String.valueOf(i + 1))) {
                     return Integer.parseInt(choice);
                 }
-            }
-        }
-    }
-
-    /**
-     * This function check for a given input and return when input is given
-     * @param question Question to ask when requesting user input
-     * @param quitKey Input key to check for
-     * @param hasQuestion If interaction has a question to be displayed
-     * @return  User input as integer
-     */
-    public static int interactWithKey(String question, int quitKey, boolean hasQuestion) {
-        Scanner scanner = new Scanner(System.in);
-
-        while (true) {
-            if (hasQuestion) System.out.println(question);
-            String input = scanner.nextLine();
-
-            if (input.equals(String.valueOf(quitKey))) {
-                return Integer.parseInt(input);
             }
         }
     }
