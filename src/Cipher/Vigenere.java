@@ -8,7 +8,7 @@ public class Vigenere {
    * @param key The key to use for encryption.
    * @return The encrypted ciphertext.
    */
-  public String encrypt(String plaintext, String key) {
+  public static String encrypt(String plaintext, String key) {
     StringBuilder ciphertext = new StringBuilder();  
     
     // Iterate through the plaintext  
@@ -43,7 +43,7 @@ public class Vigenere {
    * @param key The key to use for decryption.
    * @return The decrypted plaintext.
    */
-  public String decrypt(String ciphertext, String key) {
+  public static String decrypt(String ciphertext, String key) {
     StringBuilder plaintext = new StringBuilder();  
     
     // Iterate through the ciphertext  

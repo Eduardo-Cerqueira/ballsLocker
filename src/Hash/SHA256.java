@@ -11,7 +11,7 @@ public class SHA256 {
      * @param stringToHash Text to hash
      * @return Hash for text
      */
-    public String hash(String stringToHash) {
+    public static String hash(String stringToHash) {
         try {
 
             MessageDigest MD5Instance = MessageDigest.getInstance("SHA-256");
@@ -34,7 +34,7 @@ public class SHA256 {
      * @param hash Hash SHA-256 to match with text
      * @return Boolean attesting the text integrity
      */
-    public boolean compare(String stringToCompareWithHash, String hash) {
+    public static boolean compare(String stringToCompareWithHash, String hash) {
         return hash(stringToCompareWithHash).equals(hash);
     }
 }
