@@ -12,6 +12,7 @@ import java.util.List;
 
 import static Helpers.Validation.inputInteger;
 import static Helpers.Validation.inputString;
+import static Menu.DynamicMenu.displayLogo;
 
 public class Main {
     static ROT rotCipher = new ROT();
@@ -36,6 +37,8 @@ public class Main {
                 new MenuItem("Chiffrer un message avec Vigenere", "Vous pouvez chiffrer un message avec l'algorithme de substitution Vigenere, vous devrez saisir une clé et le message à chiffrer"),
                 new MenuItem("Déchiffrer un message avec Vigenere", "Vous pouvez déchiffrer un message avec l'algorithme de substitution Vigenere, vous devrez saisir une clé et le message à déchiffrer")
         );
+
+        displayLogo();
 
 
         int exitKey = homeMenu.size() + 1;
