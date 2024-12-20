@@ -100,16 +100,12 @@ public class DynamicMenu {
             String choice = scanner.nextLine();
 
             if (choice.equals(String.valueOf(exitKey)) || choice.equals(String.valueOf(helpKey))) {
-                int parsed = Integer.parseInt(choice);
-                scanner.close();
-                return parsed;
+                return Integer.parseInt(choice);
             }
 
             for (int i = 0; i < menu.size(); i++) {
                 if (choice.equals(String.valueOf(i + 1))) {
-                    int parsed = Integer.parseInt(choice);
-                    scanner.close();
-                    return parsed;
+                    return Integer.parseInt(choice);
                 }
             }
         }
