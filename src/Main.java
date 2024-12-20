@@ -30,6 +30,12 @@ public class Main {
                 case 3:
                     Menus.displayGenerateRandomNumber();
                     break;
+                case 4:
+                    Menus.displayEncryptSteganography();
+                    break;
+                case 5:
+                    Menus.displayDecryptSteganography();
+                    break;
             }
 
             if (menuEntry == exitKey) {

@@ -4,6 +4,8 @@ import Cipher.*;
 import Hash.MD5;
 import Hash.SHA256;
 import Helpers.CipherBuilder;
+import Steganography.Decrypt;
+import Steganography.Encrypt;
 import Struct.Action;
 import Struct.MenuItem;
 import TextFileHandler.TextFileHandler;
@@ -27,6 +29,14 @@ public class Menus {
                 }
             }),
             new MenuItem("Générer un nombre aléatoire", "Vous pouvez generer un nombre aléatoire à partir d'une chaine de characteres", new Action() {
+                public void executeAction() {
+                }
+            }),
+            new MenuItem("Camoufler une information dans une image", "Vous pouver camoufler une information dans une image", new Action() {
+                public void executeAction() {
+                }
+            }),
+            new MenuItem("Rechercher les informations cachées dans une image", "Vous pouver rechercher les potentielles informations cachées dans une image", new Action() {
                 public void executeAction() {
                 }
             })
@@ -169,6 +179,19 @@ public class Menus {
         String seed = inputString("Seed:", "Seed is invalid !");
         int range = inputInteger("Range:", "Range is invalid !");
         System.out.println("Random number is : ".concat(String.valueOf(new Cipher.LFSR(seed).generate(range))));
+    }
+
+    public static void displayEncryptSteganography() {
+        String image = inputString("Image dans le dossier images:", "Le chemin de l'image est invalide");
+        String message = inputString("Message à cacher:", "Le message est invalide");
+        Encrypt.encrypt(image, message);
+        System.out.println("Le message a été caché dans l'image");
+    }
+
+    public static void displayDecryptSteganography() {
+        String image = inputString("Image dans le dossier images:", "Le chemin de l'image est invalide");
+        String decrypted = Decrypt.decrypt(image);
+        System.out.println("Le message caché dans l'image est : ".concat(decrypted));
     }
 
     public static void saveEncryptedPassword(String encrypted, String algorithm) {
