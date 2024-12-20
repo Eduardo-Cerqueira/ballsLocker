@@ -10,16 +10,19 @@ public class Main {
     public static void main(String[] args) {
         List<MenuItem> menu = Menus.HomeMenu;
         int exitKey = menu.size() + 1;
+        
+        // Display main menu
         int menuEntry = DynamicMenu.generateMenu(menu, "\nWhere do you want to go ?", exitKey, 0);
         System.out.println("Menu entry " + menuEntry + " has been choosen !");
 
+        // Display sub menus
         while (true) {
             switch (menuEntry) {
                 case 1:
                     displaySubMenu(Menus.EncryptMenu, Menus.HomeMenu);
                     break;
                 case 2:
-                    displaySubMenu(Menus.DecryptMenu, Menus.HomeMenu);
+                    Menus.displayToDecryptPasswordMenu();
                     break;
             }
 
@@ -27,6 +30,7 @@ public class Main {
                 System.exit(0);
             }
 
+            // Reset to main menu
             menuEntry = DynamicMenu.generateMenu(Menus.HomeMenu, "\nWhere do you want to go ?", exitKey, 0);
         }
     }

@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TextFileHandler {
@@ -63,27 +63,26 @@ public class TextFileHandler {
      * @param fileType Enum of file types
      * @return Array of lines from file
      */
-    public String[] getLinesFromFile(FileType fileType) {
+    public List<FileLine> getLinesFromFile(FileType fileType) {
         Path filePath = directoryPath.resolve(fileType.getFileName());
+        List<FileLine> fileLines = new ArrayList<FileLine>();
         try {
             // Read all lines from file
             List<String> lines = Files.readAllLines(filePath);
             // Convert list to array
             // new String[0] : to create an empty array of strings of lines length
-            return lines.toArray(new String[0]);
+
+            for(String line : lines) {
+                String[] splittedLine = line.split(";");
+                fileLines.add(new FileLine(FileType.ENCRYPTED, splittedLine[0], splittedLine[1]));
+            }
+
+            return fileLines;
         } catch (IOException e) {
             System.out.println("Error reading file: " + e.getMessage());
         }
         // Return empty array if error
-        return new String[0];
-    }
-
-    public static void main(String[] args) {
-        TextFileHandler textFileHandler = new TextFileHandler();
-        FileLine line = new FileLine(FileType.ENCRYPTED, "Hello World", "ROT");
-        textFileHandler.writeNewLineToFile(line);
-        String[] lines = textFileHandler.getLinesFromFile(FileType.ENCRYPTED);
-        System.out.println(Arrays.toString(lines));
+        return fileLines;
     }
 
 }

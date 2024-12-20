@@ -14,6 +14,7 @@ import TextFileHandler.FileType;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 import static Helpers.Validation.inputInteger;
 import static Helpers.Validation.inputString;
@@ -175,17 +176,6 @@ public class Menus {
         System.out.println(cipherBuilder.getEncryptedMessage());
     }
 
-    public static void saveEncryptedPassword(String encrypted, String algorithm) {
-        TextFileHandler textFileHandler = new TextFileHandler();
-        FileLine line = new FileLine(FileType.ENCRYPTED, encrypted, algorithm);
-        textFileHandler.writeNewLineToFile(line);
-
-        String hash = SHA256.hash(encrypted);
-
-        line = new FileLine(FileType.HASHED, hash, "SHA256");
-        textFileHandler.writeNewLineToFile(line);
-    }
-
     public static void displayGenerateRandomNumber() {
         String seed = inputString("Seed:", "Seed is invalid !");
         int range = inputInteger("Range:", "Range is invalid !");
@@ -226,5 +216,56 @@ public class Menus {
     public static void cipherBuilderAddDecryptPolybe(CipherBuilder cipherBuilder) {
         cipherBuilder.decryptPolybe();
         System.out.println(cipherBuilder.getEncryptedMessage());
+    }
+
+    public static void saveEncryptedPassword(String encrypted, String algorithm) {
+        TextFileHandler textFileHandler = new TextFileHandler();
+        FileLine line = new FileLine(FileType.ENCRYPTED, encrypted, algorithm);
+        textFileHandler.writeNewLineToFile(line);
+
+        String hash = SHA256.hash(encrypted);
+
+        line = new FileLine(FileType.HASHED, hash, "SHA256");
+        textFileHandler.writeNewLineToFile(line);
+    }
+
+    /**
+     * Display the decryption menu, display the list of local password and the user can choose one to decrypt
+     */
+    public static void displayToDecryptPasswordMenu() {
+        TextFileHandler textFileHandler = new TextFileHandler();
+        List<FileLine> lines = textFileHandler.getLinesFromFile(FileType.ENCRYPTED);
+
+        // Display passwords
+        for (int i = 0; i < lines.size(); i++) {
+            String string = (i + 1) +
+                    ". " +
+                    lines.get(i).getContent();
+
+            System.out.println(string);
+        }
+
+        while (true) {
+            int choice = inputInteger("Which password do you want to decrypt ?", "Input is invalid");
+
+                for (int i = 0; i < lines.size(); i++) {
+                    if (choice == i + 1) {    
+                        FileLine password = lines.get(choice);
+            
+                        switch(password.getAlgorithm()) {
+                            case "ROT":
+                                int parsedInt = inputInteger("Number of rotate:", "Number is invalid !");
+                                String decryptedPassword = ROT.decrypt(password.getContent(), parsedInt);
+                                System.out.print(decryptedPassword);
+                                break;
+                            case "":
+                                break;
+                        }
+    
+    
+                    }
+                }
+        }
+        //System.out.println(Arrays.toString(lines));
     }
 }
