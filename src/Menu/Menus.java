@@ -17,10 +17,28 @@ import static Helpers.Validation.inputString;
 
 public class Menus {
     public static final List<MenuItem> HomeMenu = Arrays.asList(
+            new MenuItem("Chiffrer un mot de passe", "Vous pouvez chiffrer un mot de passe avec l'algorithme de votre choix, vous devrez le choisir parmi un liste d'algorithmes et ce mot de passe sera stocké de manière sécurisée dans votre ordinateur", new Action() { public void executeAction() { }}),
+            new MenuItem("Déchiffrer un mot de passe", "Vous pouvez déchiffrer un mot de passe que vous avez chiffré précedement, vous devrez le choisir parmi un liste d'algorithmes et ce mot de passe sera stocké de manière sécurisée dans votre ordinateur", new Action() { public void executeAction() { }})
+    );
+
+    public static final List<MenuItem> EncryptMenu = Arrays.asList(
+            new MenuItem("ROT", "Encrypter le mot de passe avec ROT, vous devrez saisir le nombre de rotation entre votre charactere et le charactere chiffré", new Action() { public void executeAction() { displayROTEncryptionMenu(); }}),
+            new MenuItem("Polybe", "Encrypter le mot de passe avec Polybe", new Action() { public void executeAction() { displayPolybeEncryptionMenu(); }}),
+            new MenuItem("Vigenere", "Encrypter le mot de passe avec Vigenere, vous devrez saisir une clé et le message à chiffrer", new Action() { public void executeAction() { displayVigenereEncryptionMenu(); }})
+    );
+
+    public static final List<MenuItem> DecryptMenu = Arrays.asList(
+            new MenuItem("ROT", "Decrypter le mot de passe avec ROT, vous devrez saisir le nombre de rotation entre votre charactere chiffré et le charactere", new Action() { public void executeAction() { displayROTEncryptionMenu(); }}),
+            new MenuItem("Polybe", "Decrypter le mot de passe avec Polybe", new Action() { public void executeAction() { displayPolybeEncryptionMenu(); }}),
+            new MenuItem("Vigenere", "Decrypter le mot de passe avec Vigenere, vous devrez saisir une clé pour déchiffrer", new Action() { public void executeAction() { displayVigenereEncryptionMenu(); }})
+    );
+
+    /*
+    public static final List<MenuItem> CompleteMenu = Arrays.asList(
             new MenuItem("Chiffrer un message avec ROT", "Vous pouvez chiffrer un message avec l'algorithme de substitution ROT, vous devrez saisir le nombre de rotation entre votre lettre et la lettre chiffrée", new Action() { public void executeAction() { displayROTEncryptionMenu(); }}),
             new MenuItem("Déchiffrer un message avec ROT", "Vous pouvez déchiffrer un message avec l'algorithme de substitution ROT, vous devrez saisir le nombre de rotation entre votre lettre chiffrée et la lettre", new Action() { public void executeAction() { displayROTDecryptionMenu(); }}),
             new MenuItem("Hasher un message avec MD5", "Vous pouvez hasher un message avec l'algorithme de hashing MD5", new Action() { public void executeAction() { displayMD5HashMenu(); }}),
-            new MenuItem("Hasher un message avec SHA-256", "Vous pouvez hasher un message avec l'algorithme de hashing SHA-256", new Action() { public void executeAction() { displaySHA256HashMenu(); }}),
+            new MenuItem("Hasher un message avec SHA-256", "Vous pouvez hssssssssssssssssssssssssssssssssssssssssssasher un message avec l'algorithme de hashing SHA-256", new Action() { public void executeAction() { displaySHA256HashMenu(); }}),
             new MenuItem("Comparer un message avec un hash MD5", "Vous pouvez comparer un hash issu de l'algorithme MD5 avec un message", new Action() { public void executeAction() { displayMD5CompareHashMenu(); }}),
             new MenuItem("Comparer un message avec un hash SHA-256", "Vous pouvez comparer un hash issu de l'algorithme SHA-256 avec un message", new Action() { public void executeAction() { displaySHA256CompareHashMenu(); }}),
             new MenuItem("Chiffrer un message avec Polybe", "Vous pouvez chiffrer un message avec l'algorithme Polybe", new Action() { public void executeAction() { displayPolybeEncryptionMenu(); }}),
@@ -31,6 +49,7 @@ public class Menus {
             new MenuItem("Chiffrer un message avec Vigenere", "Vous pouvez chiffrer un message avec l'algorithme de substitution Vigenere, vous devrez saisir une clé et le message à chiffrer", new Action() { public void executeAction() { displayVigenereEncryptionMenu(); }}),
             new MenuItem("Déchiffrer un message avec Vigenere", "Vous pouvez déchiffrer un message avec l'algorithme de substitution Vigenere, vous devrez saisir une clé et le message à déchiffrer", new Action() { public void executeAction() { displayVigenereDecryptionMenu(); }})
     );
+    */
 
     public static final List<MenuItem> EncryptionChainMenu = Arrays.asList(
             new MenuItem("Ajouter du Rot encrypt", "Ajouter un chiffrement sur le message actuel (encrypté ou non) avec l'algorithme de substitution ROT, vous devrez saisir le nombre de rotation entre votre lettre et la lettre chiffrée", new Action() { public void executeAction() {}}),

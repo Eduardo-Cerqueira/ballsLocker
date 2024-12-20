@@ -1,11 +1,37 @@
 package Menu;
 
+import Struct.Action;
 import Struct.MenuItem;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class DynamicMenu {
+    public static void displaySubMenu(List<MenuItem> menu, List<MenuItem> previousMenu) {
+        int exitKey = menu.size() + 1;
+        int menuEntry = DynamicMenu.generateMenu(menu, "\nWhere do you want to go ?", exitKey, 0);
+        System.out.println("Menu entry " + menuEntry + " has been choosen !");
+
+        while (true) {
+            for (int i = 0; i < menu.size(); i++) {
+                if (menuEntry == i + 1) {
+                    Action action = menu.get(i).executeAction();
+                    action.executeAction();
+
+                } else if (menuEntry == exitKey) {
+                    if (menu == Menus.HomeMenu) {
+                        System.exit(0);
+                    } else {
+                        return;
+                    }
+                }
+            }
+
+            menuEntry = DynamicMenu.generateMenu(previousMenu, "\nWhere do you want to go ?", exitKey, 0);
+        }
+    }
+
+
     /**
      * This function prints a menu list to the console and returns the menu input;
      * @param menu Each menu entry that can be chosen
