@@ -110,4 +110,23 @@ public class DynamicMenu {
             }
         }
     }
+
+    public static void displayLogo(){
+        final String ANSI_RESET = "\u001B[0m";
+        final String ANSI_BLACK = "\u001B[30m";
+        final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
+
+        // Texte à afficher
+        String text =
+                " _           _ _     _               _             \n" +
+                        "| |__   __ _| | |___| |    ___   ___| | _____ _ __ \n" +
+                        "| '_ \\ / _` | | / __| |   / _ \\ / __| |/ / _ \\ '__|\n" +
+                        "| |_) | (_| | | \\__ \\ |__| (_) | (__|   <  __/ |   \n" +
+                        "|_.__/ \\__,_|_|_|___/_____\\___/ \\___|_|\\_\\___|_|   \n";
+
+        String[] lines = text.split("\n");
+        for (String line : lines) {
+            System.out.println(ANSI_WHITE_BACKGROUND + ANSI_BLACK + line + ANSI_RESET);
+        }
+    }
 }

@@ -4,13 +4,16 @@ import Struct.MenuItem;
 
 import java.util.List;
 
+import static Menu.DynamicMenu.displayLogo;
 import static Menu.DynamicMenu.displaySubMenu;
 
 public class Main {
     public static void main(String[] args) {
         List<MenuItem> menu = Menus.HomeMenu;
         int exitKey = menu.size() + 1;
-        
+
+        displayLogo();
+
         // Display main menu
         int menuEntry = DynamicMenu.generateMenu(menu, "\nWhere do you want to go ?", exitKey, 0);
         System.out.println("Menu entry " + menuEntry + " has been choosen !");
@@ -23,6 +26,9 @@ public class Main {
                     break;
                 case 2:
                     Menus.displayToDecryptPasswordMenu();
+                    break;
+                case 3:
+                    Menus.displayGenerateRandomNumber();
                     break;
             }
 
