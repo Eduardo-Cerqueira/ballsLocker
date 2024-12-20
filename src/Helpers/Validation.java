@@ -29,6 +29,8 @@ public class Validation {
                 if (string.isBlank()) {
                     throw new Error();
                 }
+                
+                scanner.close();
                 return string;
             } catch (NumberFormatException | Error e) {
                 System.out.println(errorMessage);
@@ -50,7 +52,9 @@ public class Validation {
                 System.out.println(question);
                 String integer = scanner.nextLine();
 
-                return Integer.parseInt(integer);
+                int parsed = Integer.parseInt(integer);
+                scanner.close();
+                return parsed;
             } catch (NumberFormatException e) {
                 System.out.println(errorMessage); // if number < -2147483648 (Integer.MIN_VALUE) or number > 2147483648 (Integer.MAX_VALUE)
             }
